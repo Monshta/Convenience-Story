@@ -48,6 +48,12 @@ public class Main : MonoBehaviour {
 	public int [] workerEffect = new int[21]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	public int whichworker;
 
+	public GameObject upgradePnl;
+	public GameObject selectorPnl;
+
+	public GameObject swagText;
+	Text descText;
+	public bool isDescInUse = false;
 	void Start () {
 		yesBtn = GameObject.Find ("yesButton");
 		yesBtn.SetActive (false);
@@ -55,6 +61,12 @@ public class Main : MonoBehaviour {
 		noBtn.SetActive (false);
 		fireBtn = GameObject.Find ("fireButton");
 		fireBtn.SetActive (false);
+		selectorPnl = GameObject.Find ("SelectorPanel");
+		upgradePnl = GameObject.Find ("UpgradePanel");
+		upgradePnl.SetActive (false);
+		swagText = GameObject.Find ("descriptionText");
+		descText = swagText.GetComponent<Text> ();
+		swagText.SetActive (false);
 	}
 	
 
@@ -62,7 +74,9 @@ public class Main : MonoBehaviour {
 		if (customerRate >= 1) {
 			timer += Time.deltaTime;
 			eventDisaster += Time.deltaTime;
+			if(!isDescInUse){
 			eventHire += Time.deltaTime;
+			}
 		}
 		if (timer > 10) {//transactions happen every 10s
 			cash += (price * customerRate);
@@ -123,12 +137,15 @@ public class Main : MonoBehaviour {
 		}
 		if (eventHire > 10 && workerCount<21) {//Temporary condition to check stuff
 			chancesHire = UnityEngine.Random.Range ( 0, 100);
-			//if(eventHire > 0 && eventHire < 5){
+			if(chancesHire > 0 && chancesHire < 50){
 			placeHolderName = randomWorkerNames[(int)UnityEngine.Random.Range(0,31)];
-				//Description Text goes here.. Soon
+			swagText.SetActive (true);
+			descText.text = "Would you like to hire " + placeHolderName + "?";
 				yesBtn.SetActive(true);
 				noBtn.SetActive(true);
-			//}
+			isDescInUse = true;
+			}
+			eventHire = 0;
 		}
 	}
 
@@ -161,6 +178,8 @@ public class Main : MonoBehaviour {
 		yesBtn.SetActive (false);
 		noBtn.SetActive (false);
 		newWorker ();
+		descText.text = " ";
+		isDescInUse = false;
 	}
 	public void newWorker(){// setting up the workers
 		workerNames [workerCount] = placeHolderName;
@@ -170,6 +189,8 @@ public class Main : MonoBehaviour {
 	public void noButton(){
 		yesBtn.SetActive (false);
 		noBtn.SetActive (false);
+		isDescInUse = false;
+		descText.text = " ";
 	}
 	public void fireButton(){// to fire the workers, itll be set active when the user clicks on a worker
 		//whichworker = slected; //slected will return when a worker is selected
@@ -188,6 +209,14 @@ public class Main : MonoBehaviour {
 		}
 		workerCount --;
 		fireBtn.SetActive (false);
+	}
+	public void toUpgradePanel(){
+		selectorPnl.SetActive (false);
+		upgradePnl.SetActive (true);
+	}
+	public void backButton(){
+		selectorPnl.SetActive (true);
+		upgradePnl.SetActive (false);
 	}
 
 	}
