@@ -38,18 +38,20 @@ public class Main : MonoBehaviour {
 	public GameObject yesBtn;
 	public GameObject noBtn;
 	public GameObject fireBtn;
+	public GameObject okayBtn;
 
 	public String[] randomWorkerNames = new string[31] {"Adam","Eve","Francis","Anthony","Josh","John",//This is the pool of names we will generate
 	"Patrick","Patricia","Grace","Rjen","Tristan","Jack","Jill","Andrew","Chris","Kori","Jacob","Edward","Bella",// names from
 	"Angel","Ethiopia","Caitlyn","Sharqueesha","Jasmine","Lewis","Antu","Jackie","Megan", "Arnold", "Zach","Cody"};
 	public String placeHolderName;//temporarily holds name
-	public String [] workerNames = new string[21] {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "};
-	public float [] workerCost = new float[21]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};// All of these are placeholders for arrays
-	public int [] workerEffect = new int[21]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	public String [] workerNames = new string[22] {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "};
+	public float [] workerCost = new float[22]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};// All of these are placeholders for arrays
+	public int [] workerEffect = new int[22]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	public int whichworker;
 
 	public GameObject upgradePnl;
 	public GameObject selectorPnl;
+	public GameObject workerPnl;
 
 	public GameObject swagText;
 	Text descText;
@@ -61,9 +63,13 @@ public class Main : MonoBehaviour {
 		noBtn.SetActive (false);
 		fireBtn = GameObject.Find ("fireButton");
 		fireBtn.SetActive (false);
+		okayBtn = GameObject.Find ("okayButton");
+		okayBtn.SetActive (false);
 		selectorPnl = GameObject.Find ("SelectorPanel");
 		upgradePnl = GameObject.Find ("UpgradePanel");
 		upgradePnl.SetActive (false);
+		workerPnl = GameObject.Find ("WorkerPanel"); 
+		workerPnl.SetActive (false);
 		swagText = GameObject.Find ("descriptionText");
 		descText = swagText.GetComponent<Text> ();
 		swagText.SetActive (false);
@@ -135,14 +141,16 @@ public class Main : MonoBehaviour {
 			}
 			eventRobbery = 0;
 		}
-		if (eventHire > 10 && workerCount<21) {//Temporary condition to check stuff
+		if (eventHire > 2 && workerCount<51) {//Temporary condition to check stuff
 			chancesHire = UnityEngine.Random.Range ( 0, 100);
 			if(chancesHire > 0 && chancesHire < 50){
 			placeHolderName = randomWorkerNames[(int)UnityEngine.Random.Range(0,31)];
 			swagText.SetActive (true);
 			descText.text = "Would you like to hire " + placeHolderName + "?";
-				yesBtn.SetActive(true);
-				noBtn.SetActive(true);
+			yesBtn.SetActive(true);
+			noBtn.SetActive(true);
+			okayBtn.SetActive(false);
+			fireBtn.SetActive(false);
 			isDescInUse = true;
 			}
 			eventHire = 0;
@@ -184,7 +192,8 @@ public class Main : MonoBehaviour {
 	public void newWorker(){// setting up the workers
 		workerNames [workerCount] = placeHolderName;
 		workerCost [workerCount] = UnityEngine.Random.Range (fame - 5, fame + 5);
-		workerEffect [workerCount] = (int)UnityEngine.Random.Range (fame - 5, fame + 5);
+		workerEffect [workerCount] = (int)UnityEngine.Random.Range (fame - 4, fame + 5);
+		workerCount ++;
 	}
 	public void noButton(){
 		yesBtn.SetActive (false);
@@ -193,22 +202,24 @@ public class Main : MonoBehaviour {
 		descText.text = " ";
 	}
 	public void fireButton(){// to fire the workers, itll be set active when the user clicks on a worker
-		//whichworker = slected; //slected will return when a worker is selected
 		workerCost [20] = 0;
 		workerEffect [20] = 0;
 		workerNames [20] = " ";
 		workerCost [whichworker] = -1;
 		for (int i = 0; i<21; i++) {
 			if(workerCost[i] == -1){
-				for (int j = 0; j < (21-i);j++){
-					workerCost[i] = workerCost[i+1];
-					workerEffect[i] = workerEffect[i+1];
-					workerNames[i] = workerNames[i+1];
+				for (int j = i; j < (20-j);j++){
+					workerCost[j] = workerCost[j+1];
+					workerEffect[j] = workerEffect[j+1];
+					workerNames[j] = workerNames[j+1];
 				}
 			}
 		}
+		descText.text = " ";
 		workerCount --;
 		fireBtn.SetActive (false);
+		okayBtn.SetActive (false);
+		isDescInUse = false;
 	}
 	public void toUpgradePanel(){
 		selectorPnl.SetActive (false);
@@ -217,7 +228,380 @@ public class Main : MonoBehaviour {
 	public void backButton(){
 		selectorPnl.SetActive (true);
 		upgradePnl.SetActive (false);
+		workerPnl.SetActive (false);
 	}
+	public void toWorkerPanel(){
+		workerPnl.SetActive (true);
+		selectorPnl.SetActive (false);
+	}
+	public void okayButton(){
+		descText.text = " ";
+		okayBtn.SetActive (false);
+		fireBtn.SetActive (false);
+		isDescInUse = false;
+	}
+	public void w1(){
+		if (workerEffect [0] != 0) {
+		whichworker = 0;
+		descText.text = "Name: " + workerNames[0] + "\n Cost for worker: " +workerCost[0]+ "\n" +
+			"Customer rate increased by: "+ workerEffect[0];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w2(){
+		if (workerEffect [1] != 0) {
+			whichworker = 1;
+			descText.text = "Name: " + workerNames[1] + "\n Cost for worker: " +workerCost[1]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[1];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w3(){
+		if (workerEffect [2] != 0) {
+			whichworker = 2;
+			descText.text = "Name: " + workerNames[2] + "\n Cost for worker: " +workerCost[2]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[2];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w4(){
+		if (workerEffect [3] != 0) {
+			whichworker = 3;
+			descText.text = "Name: " + workerNames[3] + "\n Cost for worker: " +workerCost[3]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[3];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w5(){
+		if (workerEffect [4] != 0) {
+			whichworker = 4;
+			descText.text = "Name: " + workerNames[4] + "\n Cost for worker: " +workerCost[4]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[4];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w6(){
+		if (workerEffect [5] != 0) {
+			whichworker = 5;
+			descText.text = "Name: " + workerNames[5] + "\n Cost for worker: " +workerCost[5]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[5];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w7(){
+		if (workerEffect [6] != 0) {
+			whichworker = 6;
+			descText.text = "Name: " + workerNames[6] + "\n Cost for worker: " +workerCost[6]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[6];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w8(){
+		if (workerEffect [7] != 0) {
+			whichworker = 7;
+			descText.text = "Name: " + workerNames[7] + "\n Cost for worker: " +workerCost[7]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[7];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w9(){
+		if (workerEffect [8] != 0) {
+			whichworker = 8;
+			descText.text = "Name: " + workerNames[8] + "\n Cost for worker: " +workerCost[8]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[8];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w10(){
+		if (workerEffect [9] != 0) {
+			whichworker = 9;
+			descText.text = "Name: " + workerNames[9] + "\n Cost for worker: " +workerCost[9]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[9];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w11(){
+		if (workerEffect [10] != 0) {
+			whichworker = 10;
+			descText.text = "Name: " + workerNames[10] + "\n Cost for worker: " +workerCost[10]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[10];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w12(){
+		if (workerEffect [11] != 0) {
+			whichworker = 11;
+			descText.text = "Name: " + workerNames[11] + "\n Cost for worker: " +workerCost[11]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[11];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w13(){
+		if (workerEffect [12] != 0) {
+			whichworker = 12;
+			descText.text = "Name: " + workerNames[12] + "\n Cost for worker: " +workerCost[12]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[12];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w14(){
+		if (workerEffect [13] != 0) {
+			whichworker = 13;
+			descText.text = "Name: " + workerNames[13] + "\n Cost for worker: " +workerCost[13]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[13];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w15(){
+		if (workerEffect [14] != 0) {
+			whichworker = 14;
+			descText.text = "Name: " + workerNames[14] + "\n Cost for worker: " +workerCost[14]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[14];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w16(){
+		if (workerEffect [15] != 0) {
+			whichworker = 15;
+			descText.text = "Name: " + workerNames[15] + "\n Cost for worker: " +workerCost[15]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[15];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w17(){
+		if (workerEffect [16] != 0) {
+			whichworker = 16;
+			descText.text = "Name: " + workerNames[16] + "\n Cost for worker: " +workerCost[16]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[16];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w18(){
+		if (workerEffect [17] != 0) {
+			whichworker = 17;
+			descText.text = "Name: " + workerNames[17] + "\n Cost for worker: " +workerCost[17]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[17];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w19(){
+		if (workerEffect [18] != 0) {
+			whichworker = 18;
+			descText.text = "Name: " + workerNames[18] + "\n Cost for worker: " +workerCost[18]+ "\n" +
+				"Customer rate increased by: "+ workerEffect[18];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive(false);
+			noBtn.SetActive(false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+		}
+	}
+	public void w20(){
+		if (workerEffect [19] != 0) {
+			whichworker = 19;
+			descText.text = "Name: " + workerNames [19] + "\n Cost for worker: " + workerCost [19] + "\n" +
+				"Customer rate increased by: " + workerEffect [19];
+			fireBtn.SetActive (true);
+			okayBtn.SetActive (true);
+			isDescInUse = true;
+			yesBtn.SetActive (false);
+			noBtn.SetActive (false);
+		}
+		else{
+			descText.text = " ";
+			isDescInUse = false;
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+			}
+		
+	}
+
 
 	}
 
