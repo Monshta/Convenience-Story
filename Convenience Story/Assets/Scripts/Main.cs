@@ -61,12 +61,14 @@ public class Main : MonoBehaviour {
 	public String [] randomCompanyNames = new String [16]{"Rito Games","Pysical Ent","Ubihard","Nintendont",
 	"Jzepol","Sycooyes","Tairy Hesticles","Mushrooms","Chicken Alfredo","Unilevel","Yami STudios","Frantu","Kieth","Faker",
 	"Ethernet Cable","Carlos"};
-	public String [] buisinessName = new string[9]{" "," "," "," "," "," "," "," "," "};
-	public float [] buisinessCost = new float[9]{0,0,0,0,0,0,0,0,0};
+	public String [] buisinessName = new string[10]{" "," "," "," "," "," "," "," "," "," "};
+	public float [] buisinessCost = new float[10]{0,0,0,0,0,0,0,0,0,0};
 	public int buisinessOfferCount = 0;
 	public float eventBuisiness = 0;
 	public float buisinessChances = 0;
-	public int [] offerType = new int[9]{0,0,0,0,0,0,0,0,0}; 
+	public int [] offerType = new int[10]{0,0,0,0,0,0,0,0,0,0}; 
+	public float costHolder ;
+	public int whichOffer;
 
 	public GameObject swagText2;
 	Text buisinessText;
@@ -90,8 +92,9 @@ public class Main : MonoBehaviour {
 		swagText = GameObject.Find ("descriptionText");
 		descText = swagText.GetComponent<Text> ();
 		swagText.SetActive (false);
-		swagText2 = GameObject.Find ("BuisinessTxt");
-		buisinessText = swagText2.GetComponent<Text> ();
+		buisinessText = swagText.GetComponent<Text> ();
+		swagText = GameObject.Find ("BuisinessTxt");
+	
 	}
 	
 
@@ -275,6 +278,7 @@ public class Main : MonoBehaviour {
 		selectorPnl.SetActive (true);
 		upgradePnl.SetActive (false);
 		workerPnl.SetActive (false);
+		buisinessPnl.SetActive (false);
 	}
 	public void toWorkerPanel(){
 		workerPnl.SetActive (true);
@@ -648,7 +652,13 @@ public class Main : MonoBehaviour {
 		
 	}
 	public void offer1(){
+
+		buisinessText.text = "hi";
 		if (offerType [0] == 1) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[0]+
+				"would like to send you an offer to raise your customaer rate for " +
+				buisinessCost[0] + "Thank you sire";
+			whichOffer = 0;
 
 		}
 		if (offerType [0] == 2) {
@@ -661,7 +671,47 @@ public class Main : MonoBehaviour {
 			
 		}
 	}
+	public void acceptBtn(){
+		if (offerType [whichOffer] == 1) {
+			if (cash > buisinessCost [whichOffer]) {
+				cash -= buisinessCost [whichOffer];
+				//effect of offer here
+			}
+		}
+		if (offerType [whichOffer] == 2) {
+			if (cash > buisinessCost [whichOffer]) {
+				cash -= buisinessCost [whichOffer];
+			}
+		}
+		if (offerType [whichOffer] == 3) {
+			if (cash > buisinessCost [whichOffer]) {
+				cash -= buisinessCost [whichOffer];
+			}
+		}
+		if (offerType [whichOffer] == 4) {
+			if (cash > buisinessCost [whichOffer]) {
+				cash -= buisinessCost [whichOffer];
+			}
+		}
+	}
+	public void declineButton(){
+		buisinessName [9] = " ";
+		buisinessCost [9] = 0;
+		buisinessCost [whichOffer] = -1;
+		for (int i = 0; i<10; i++) {
+			if (buisinessCost [i] == -1) {
+				for (int j = i; j < (9-j); j++) {
+					buisinessCost [j] = buisinessCost [j + 1];
+					buisinessName [j] = buisinessName [j + 1];
+				}
 
+			}
+		}
+	}
+	public void toBuisinessPnl(){
+		buisinessPnl.SetActive (true);
+		selectorPnl.SetActive (false);
+	}
 
 	}
 
