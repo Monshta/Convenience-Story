@@ -52,11 +52,26 @@ public class Main : MonoBehaviour {
 	public GameObject upgradePnl;
 	public GameObject selectorPnl;
 	public GameObject workerPnl;
+	public GameObject buisinessPnl;
 
 	public GameObject swagText;
 	Text descText;
 	public bool isDescInUse = false;
-	void Start () {
+
+	public String [] randomCompanyNames = new String [16]{"Rito Games","Pysical Ent","Ubihard","Nintendont",
+	"Jzepol","Sycooyes","Tairy Hesticles","Mushrooms","Chicken Alfredo","Unilevel","Yami STudios","Frantu","Kieth","Faker",
+	"Ethernet Cable","Carlos"};
+	public String [] buisinessName = new string[9]{" "," "," "," "," "," "," "," "," "};
+	public float [] buisinessCost = new float[9]{0,0,0,0,0,0,0,0,0};
+	public int buisinessOfferCount = 0;
+	public float eventBuisiness = 0;
+	public float buisinessChances = 0;
+	public int [] offerType = new int[9]{0,0,0,0,0,0,0,0,0}; 
+
+	public GameObject swagText2;
+	Text buisinessText;
+
+	 void Start () {
 		yesBtn = GameObject.Find ("yesButton");
 		yesBtn.SetActive (false);
 		noBtn = GameObject.Find ("noButton");
@@ -70,14 +85,19 @@ public class Main : MonoBehaviour {
 		upgradePnl.SetActive (false);
 		workerPnl = GameObject.Find ("WorkerPanel"); 
 		workerPnl.SetActive (false);
+		buisinessPnl = GameObject.Find ("BuisinessPanel");
+		buisinessPnl.SetActive (false);
 		swagText = GameObject.Find ("descriptionText");
 		descText = swagText.GetComponent<Text> ();
 		swagText.SetActive (false);
+		swagText2 = GameObject.Find ("BuisinessTxt");
+		buisinessText = swagText2.GetComponent<Text> ();
 	}
 	
 
 	void Update () {
 		if (customerRate >= 1) {
+			eventBuisiness += Time.deltaTime;
 			timer += Time.deltaTime;
 			eventDisaster += Time.deltaTime;
 			if(!isDescInUse){
@@ -144,7 +164,7 @@ public class Main : MonoBehaviour {
 		if (eventHire > 2 && workerCount<51) {//Temporary condition to check stuff
 			chancesHire = UnityEngine.Random.Range ( 0, 100);
 			if(chancesHire > 0 && chancesHire < 50){
-			placeHolderName = randomWorkerNames[(int)UnityEngine.Random.Range(0,31)];
+			placeHolderName = randomWorkerNames[(int)UnityEngine.Random.Range(0,30)];
 			swagText.SetActive (true);
 			descText.text = "Would you like to hire " + placeHolderName + "?";
 			yesBtn.SetActive(true);
@@ -154,6 +174,32 @@ public class Main : MonoBehaviour {
 			isDescInUse = true;
 			}
 			eventHire = 0;
+		}
+		if (eventBuisiness > 20 && buisinessOfferCount < 9) {
+			buisinessChances = UnityEngine.Random.Range(1,100);
+			if(buisinessChances > 0 && buisinessChances < 3){
+				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
+				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
+				offerType[buisinessOfferCount] = 1;
+			}
+			if(buisinessChances > 3 && buisinessChances < 6){
+				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
+				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
+				offerType[buisinessOfferCount] = 2;
+				
+			}
+			if(buisinessChances > 6 && buisinessChances < 9){
+				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
+				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
+				offerType[buisinessOfferCount] = 3;
+				
+			}
+			if(buisinessChances > 9 && buisinessChances < 12){
+				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
+				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
+				offerType[buisinessOfferCount] = 4;
+				
+			}
 		}
 	}
 
@@ -600,6 +646,20 @@ public class Main : MonoBehaviour {
 			okayBtn.SetActive (false);
 			}
 		
+	}
+	public void offer1(){
+		if (offerType [0] == 1) {
+
+		}
+		if (offerType [0] == 2) {
+			
+		}
+		if (offerType [0] == 3) {
+			
+		}
+		if (offerType [0] == 4) {
+			
+		}
 	}
 
 
