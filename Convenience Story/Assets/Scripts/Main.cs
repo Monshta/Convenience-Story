@@ -65,12 +65,12 @@ public class Main : MonoBehaviour {
 	public String [] randomCompanyNames = new String [16]{"Rito Games","Pysical Ent","Ubihard","Nintendont",
 	"Jzepol","Sycooyes","Tairy Hesticles","Mushrooms","Chicken Alfredo","Unilevel","Yami STudios","Frantu","Kieth","Faker",
 	"Ethernet Cable","Carlos"};
-	public String [] buisinessName = new string[12]{" "," "," "," "," "," "," "," "," "," "," "," "};
-	public float [] buisinessCost = new float[12]{0,0,0,0,0,0,0,0,0,0,0,0};
+	public String [] buisinessName = new string[13]{" "," "," "," "," "," "," "," "," "," "," "," "," "};
+	public float [] buisinessCost = new float[13]{0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
 	public int buisinessOfferCount = 0;
 	public float eventBuisiness = 0;
 	public float buisinessChances = 0;
-	public int [] offerType = new int[12]{0,0,0,0,0,0,0,0,0,0,0,0}; 
+	public int [] offerType = new int[13]{0,0,0,0,0,0,0,0,0,0,0,0,0}; 
 	public float costHolder ;
 	public int whichOffer;
 
@@ -713,6 +713,9 @@ public class Main : MonoBehaviour {
 			whichOffer = 0;
 			
 		}
+		if (offerType [0] == 0) {
+			buisinessText.text = " ";
+		}
 	}
 	public void acceptBtn(){
 		if (offerType [whichOffer] == 1) {
@@ -744,20 +747,38 @@ public class Main : MonoBehaviour {
 				}
 			}
 		}
+		if (cash > buisinessCost [whichOffer]) {
+			buisinessName [8] = " ";
+			buisinessCost [8] = 0;
+			offerType [8] = 0;
+			offerType [whichOffer] = -1;
+			for (int i = 0; i<8; i++) {
+				if (offerType [i] == -1) {
+					for (int j = i; j < (8-j); j++) {
+						buisinessCost [j] = buisinessCost [j + 1];
+						buisinessName [j] = buisinessName [j + 1];
+						offerType [j] = offerType [j + 1];
+						buisinessText.text = " ";
+					}
+				
+				}
+			}
+		}
 	}
 	public void declineButton(){
-		buisinessName [11] = " ";
-		buisinessCost [11] = 0;
-		offerType [11] = 0;
+		buisinessName [8] = " ";
+		buisinessCost [8] = 0.0f;
+		offerType [8] = 0;
 		offerType [whichOffer] = -1;
-		for (int i = 0; i<10; i++) {
+		for (int i = 0; i<8; i++) {
 			if (offerType [i] == -1) {
-				for (int j = i; j < (9-j); j++) {
+				for (int j = i; j <=(8-j); j++) {
 					buisinessCost [j] = buisinessCost [j + 1];
 					buisinessName [j] = buisinessName [j + 1];
 					offerType[j] = offerType[j+1];
+					buisinessText.text = " ";
 				}
-
+				buisinessOfferCount--;
 			}
 		}
 	}
@@ -786,8 +807,10 @@ public class Main : MonoBehaviour {
 				"would like to send you an offer protect you from robery for " +
 					buisinessCost[1] + "Thank you sire";
 			whichOffer = 1;
-
-	}
+			}
+		if (offerType [1] == 0) {
+			buisinessText.text = " ";
+		}
 	}
 	public void offer3(){
 		if (offerType [2] == 1) {
@@ -809,6 +832,9 @@ public class Main : MonoBehaviour {
 					buisinessCost[2] + "Thank you sire";
 			whichOffer = 2;
 			
+		}
+		if (offerType [2] == 0) {
+			buisinessText.text = " ";
 		}
 	}
 	public void offer4(){
@@ -832,6 +858,9 @@ public class Main : MonoBehaviour {
 			whichOffer = 3;
 			
 		}
+		if (offerType [3] == 0) {
+			buisinessText.text = " ";
+		}
 	}
 		public void offer5(){
 			if (offerType [4] == 1) {
@@ -853,6 +882,9 @@ public class Main : MonoBehaviour {
 						buisinessCost[4] + "Thank you sire";
 				whichOffer = 4;
 				
+		}
+		if (offerType [4] == 0) {
+			buisinessText.text = " ";
 		}
 	}
 	public void offer6(){
@@ -876,6 +908,9 @@ public class Main : MonoBehaviour {
 			whichOffer = 5;
 			
 		}
+		if (offerType [5] == 0) {
+			buisinessText.text = " ";
+		}
 	}
 	public void offer7(){
 		if (offerType [6] == 1) {
@@ -897,6 +932,9 @@ public class Main : MonoBehaviour {
 					buisinessCost[6] + "Thank you sire";
 			whichOffer = 6;
 			
+		}
+		if (offerType [6] == 0) {
+			buisinessText.text = " ";
 		}
 	}
 	public void offer8(){
@@ -920,29 +958,11 @@ public class Main : MonoBehaviour {
 			whichOffer = 7;
 			
 		}
-	}
-	public void offer9(){
-		if (offerType [8] == 1) {
-			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[8]+
-				"would like to send you an offer to raise your customaer rate for " +
-					buisinessCost[8] + "Thank you sire";
-			whichOffer = 8;
-			
-		}
-		if (offerType [8] == 2) {
-			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[8]+
-				"would like to send you an offer to raise your merchandice quality for " +
-					buisinessCost[8] + "Thank you sire";
-			whichOffer = 8;
-		}
-		if (offerType [8] == 3) {
-			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[8]+
-				"would like to send you an offer protect you from robery for " +
-					buisinessCost[8] + "Thank you sire";
-			whichOffer = 8;
-			
+		if (offerType [7] == 0) {
+			buisinessText.text = " ";
 		}
 	}
+
 }
 
 
