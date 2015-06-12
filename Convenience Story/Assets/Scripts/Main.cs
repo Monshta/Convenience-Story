@@ -4,6 +4,7 @@ using System.Collections;
 using System;
 
 public class Main : MonoBehaviour {
+	public bool start = true;
 	public float timer = 0.0f;
 	public int customerRate = 1;
 	public float price = 1f;
@@ -48,11 +49,14 @@ public class Main : MonoBehaviour {
 	public float [] workerCost = new float[22]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};// All of these are placeholders for arrays
 	public int [] workerEffect = new int[22]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	public int whichworker;
+	public int workerBenifit;
+	public float workerPay;
 
 	public GameObject upgradePnl;
 	public GameObject selectorPnl;
 	public GameObject workerPnl;
 	public GameObject buisinessPnl;
+	public GameObject alertPnl;
 
 	public GameObject swagText;
 	Text descText;
@@ -61,44 +65,73 @@ public class Main : MonoBehaviour {
 	public String [] randomCompanyNames = new String [16]{"Rito Games","Pysical Ent","Ubihard","Nintendont",
 	"Jzepol","Sycooyes","Tairy Hesticles","Mushrooms","Chicken Alfredo","Unilevel","Yami STudios","Frantu","Kieth","Faker",
 	"Ethernet Cable","Carlos"};
-	public String [] buisinessName = new string[10]{" "," "," "," "," "," "," "," "," "," "};
-	public float [] buisinessCost = new float[10]{0,0,0,0,0,0,0,0,0,0};
+	public String [] buisinessName = new string[12]{" "," "," "," "," "," "," "," "," "," "," "," "};
+	public float [] buisinessCost = new float[12]{0,0,0,0,0,0,0,0,0,0,0,0};
 	public int buisinessOfferCount = 0;
 	public float eventBuisiness = 0;
 	public float buisinessChances = 0;
-	public int [] offerType = new int[10]{0,0,0,0,0,0,0,0,0,0}; 
+	public int [] offerType = new int[12]{0,0,0,0,0,0,0,0,0,0,0,0}; 
 	public float costHolder ;
 	public int whichOffer;
 
 	public GameObject swagText2;
+	public GameObject swagText3;
 	Text buisinessText;
+	Text AlertText;
+
+	public float buff9Timer;
+	public float buff8Timer;
+	public float buff7Timer;
+	public float buff6Timer;
+	public float buff5Timer;
+	public float buff4Timer;
+	public float buff3Timer;
+	public float buff2Timer;
+	public float buff1Timer;
 
 	 void Start () {
 		yesBtn = GameObject.Find ("yesButton");
-		yesBtn.SetActive (false);
 		noBtn = GameObject.Find ("noButton");
-		noBtn.SetActive (false);
 		fireBtn = GameObject.Find ("fireButton");
-		fireBtn.SetActive (false);
 		okayBtn = GameObject.Find ("okayButton");
-		okayBtn.SetActive (false);
 		selectorPnl = GameObject.Find ("SelectorPanel");
 		upgradePnl = GameObject.Find ("UpgradePanel");
-		upgradePnl.SetActive (false);
 		workerPnl = GameObject.Find ("WorkerPanel"); 
-		workerPnl.SetActive (false);
 		buisinessPnl = GameObject.Find ("BuisinessPanel");
-		buisinessPnl.SetActive (false);
+		alertPnl = GameObject.Find ("AlertPanel");
 		swagText = GameObject.Find ("descriptionText");
 		descText = swagText.GetComponent<Text> ();
-		swagText.SetActive (false);
-		buisinessText = swagText.GetComponent<Text> ();
+		buisinessText = swagText2.GetComponent<Text> ();
 		swagText = GameObject.Find ("BuisinessTxt");
+		swagText = GameObject.Find ("AlertTxt");
+		AlertText = swagText3.GetComponent<Text> ();
 	
 	}
 	
 
 	void Update () {
+		if (start == true) {
+			yesBtn.SetActive (false);
+			noBtn.SetActive (false);
+			fireBtn.SetActive (false);
+			okayBtn.SetActive (false);
+			upgradePnl.SetActive (false);
+			workerPnl.SetActive (false);
+			buisinessPnl.SetActive (false);
+			swagText.SetActive (false);
+			start = false;
+			alertPnl.SetActive(false);
+		}
+		workerBenifit = (workerEffect [0] + workerEffect [1] + workerEffect [2] + workerEffect [3] + workerEffect [4] + 
+			workerEffect [5] + workerEffect [6] + workerEffect [7] + workerEffect [8] + workerEffect [9] + 
+			workerEffect [10] + workerEffect [11] + workerEffect [12] + workerEffect [13] + workerEffect [14] + 
+			workerEffect [15] + workerEffect [16] + workerEffect [17] + workerEffect [18] + workerEffect [19] + workerEffect [20]);
+
+		workerPay = (workerCost [0] + workerCost [1] + workerCost [2] + workerCost [3] + workerCost [4] + workerCost [5] +
+			workerCost [6] + workerCost [7] + workerCost [8] + workerCost [9] + workerCost [10] + workerCost [11] +
+			workerCost [12] + workerCost [13] + workerCost [14] + workerCost [15] + workerCost [16] + workerCost [17] +
+			workerCost [18] + workerCost [19] + workerCost [20]);
+
 		if (customerRate >= 1) {
 			eventBuisiness += Time.deltaTime;
 			timer += Time.deltaTime;
@@ -110,6 +143,8 @@ public class Main : MonoBehaviour {
 		if (timer > 10) {//transactions happen every 10s
 			cash += (price * customerRate);
 			timer = 0.0f;
+			cash -= workerPay;
+			cash += workerBenifit;
 		}
 
 		if (fame > 50 && fame < 100 && (fameEvent1 == true)) {// these are events that happen
@@ -142,14 +177,17 @@ public class Main : MonoBehaviour {
 				storeUpgradeCounter--;					// it nageates the store upgrade.
 				customerRate -= 1;
 				disasterCounter++;
+				AlertText.text = "You just got hit by a tsumani";
 			}
 			if (chancesDisaster > 5 && chancesDisaster < 10) { 
 				merchandiceCounter--;		//this is a earthquake
 				price -= 1;					// it ruins the merchandise
 				disasterCounter++;
+				AlertText.text = "You just got rocked by an earthquake";
 			}
 			if (chancesDisaster > 5 && chancesDisaster < 10) {  //i wana put a volcano here
-				disasterCounter++;							// but we havnt figured out the
+				disasterCounter++;		
+				AlertText.text = "You just got melted by a volcano";// but we havnt figured out the
 			}												// other mechanics
 			eventDisaster = 0;	
 
@@ -161,6 +199,7 @@ public class Main : MonoBehaviour {
 			if(chancesRobbery > 0	&&	chancesRobbery < 5){
 				cash = cash - (cash * 0.1f);
 				robberyCounter ++;
+				AlertText.text = "You just got robbed";
 			}
 			eventRobbery = 0;
 		}
@@ -178,31 +217,31 @@ public class Main : MonoBehaviour {
 			}
 			eventHire = 0;
 		}
-		if (eventBuisiness > 20 && buisinessOfferCount < 9) {
+		if (eventBuisiness > 2 && buisinessOfferCount < 9) {
 			buisinessChances = UnityEngine.Random.Range(1,100);
-			if(buisinessChances > 0 && buisinessChances < 3){
+			eventBuisiness = 0;
+			if(buisinessChances > 0 && buisinessChances < 30){
 				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
-				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
+				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*36/7, fame * 49/7);
 				offerType[buisinessOfferCount] = 1;
+				buisinessOfferCount++;
+				AlertText.text = "You just got a buisiness offer";
 			}
-			if(buisinessChances > 3 && buisinessChances < 6){
+			if(buisinessChances > 3 && buisinessChances < 60){
 				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
 				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
 				offerType[buisinessOfferCount] = 2;
-				
+				buisinessOfferCount++;
+				AlertText.text = "You just got a buisiness offer";
 			}
 			if(buisinessChances > 6 && buisinessChances < 9){
 				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
 				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
 				offerType[buisinessOfferCount] = 3;
-				
+				buisinessOfferCount++;
+				AlertText.text = "You just got a buisiness offer";
 			}
-			if(buisinessChances > 9 && buisinessChances < 12){
-				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
-				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
-				offerType[buisinessOfferCount] = 4;
-				
-			}
+			eventBuisiness = 0;
 		}
 	}
 
@@ -279,6 +318,7 @@ public class Main : MonoBehaviour {
 		upgradePnl.SetActive (false);
 		workerPnl.SetActive (false);
 		buisinessPnl.SetActive (false);
+		Time.timeScale = 1;
 	}
 	public void toWorkerPanel(){
 		workerPnl.SetActive (true);
@@ -652,8 +692,6 @@ public class Main : MonoBehaviour {
 		
 	}
 	public void offer1(){
-
-		buisinessText.text = "hi";
 		if (offerType [0] == 1) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[0]+
 				"would like to send you an offer to raise your customaer rate for " +
@@ -662,12 +700,17 @@ public class Main : MonoBehaviour {
 
 		}
 		if (offerType [0] == 2) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[0]+
+				"would like to send you an offer to raise your merchandice quality for " +
+					buisinessCost[0] + "Thank you sire";
+			whichOffer = 0;
 			
 		}
 		if (offerType [0] == 3) {
-			
-		}
-		if (offerType [0] == 4) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[0]+
+				"would like to send you an offer protect you from robery for " +
+					buisinessCost[0] + "Thank you sire";
+			whichOffer = 0;
 			
 		}
 	}
@@ -675,34 +718,44 @@ public class Main : MonoBehaviour {
 		if (offerType [whichOffer] == 1) {
 			if (cash > buisinessCost [whichOffer]) {
 				cash -= buisinessCost [whichOffer];
-				//effect of offer here
+				buff9Timer += Time.deltaTime;
+				while(buff9Timer<60){
+					customerRate=(int)(customerRate*9/7);
+				}
+				customerRate = (int)(customerRate*7/9);
 			}
 		}
 		if (offerType [whichOffer] == 2) {
 			if (cash > buisinessCost [whichOffer]) {
 				cash -= buisinessCost [whichOffer];
+				buff9Timer += Time.deltaTime;
+				while(buff9Timer<60){
+					merchandiceCost=(merchandiceCost*9/7);
+				}
+				merchandiceCost= (merchandiceCost*7/9);
 			}
 		}
 		if (offerType [whichOffer] == 3) {
 			if (cash > buisinessCost [whichOffer]) {
 				cash -= buisinessCost [whichOffer];
-			}
-		}
-		if (offerType [whichOffer] == 4) {
-			if (cash > buisinessCost [whichOffer]) {
-				cash -= buisinessCost [whichOffer];
+				buff9Timer += Time.deltaTime;
+				while(buff9Timer<60){
+					eventRobbery-= Time.deltaTime;
+				}
 			}
 		}
 	}
 	public void declineButton(){
-		buisinessName [9] = " ";
-		buisinessCost [9] = 0;
-		buisinessCost [whichOffer] = -1;
+		buisinessName [11] = " ";
+		buisinessCost [11] = 0;
+		offerType [11] = 0;
+		offerType [whichOffer] = -1;
 		for (int i = 0; i<10; i++) {
-			if (buisinessCost [i] == -1) {
+			if (offerType [i] == -1) {
 				for (int j = i; j < (9-j); j++) {
 					buisinessCost [j] = buisinessCost [j + 1];
 					buisinessName [j] = buisinessName [j + 1];
+					offerType[j] = offerType[j+1];
 				}
 
 			}
@@ -711,7 +764,186 @@ public class Main : MonoBehaviour {
 	public void toBuisinessPnl(){
 		buisinessPnl.SetActive (true);
 		selectorPnl.SetActive (false);
+		Time.timeScale = 0;
+		Debug.Log (eventRobbery);
 	}
+	public void offer2(){
+		if (offerType [1] == 1) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[1]+
+				"would like to send you an offer to raise your customaer rate for " +
+					buisinessCost[1] + "Thank you sire";
+			whichOffer = 1;
+			
+		}
+		if (offerType [1] == 2) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[1]+
+				"would like to send you an offer to raise your merchandice quality for " +
+					buisinessCost[1] + "Thank you sire";
+			whichOffer = 1;
+		}
+		if (offerType [1] == 3) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[1]+
+				"would like to send you an offer protect you from robery for " +
+					buisinessCost[1] + "Thank you sire";
+			whichOffer = 1;
 
 	}
+	}
+	public void offer3(){
+		if (offerType [2] == 1) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[2]+
+				"would like to send you an offer to raise your customaer rate for " +
+					buisinessCost[2] + "Thank you sire";
+			whichOffer = 2;
+			
+		}
+		if (offerType [2] == 2) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[2]+
+				"would like to send you an offer to raise your merchandice quality for " +
+					buisinessCost[2] + "Thank you sire";
+			whichOffer = 2;
+		}
+		if (offerType [2] == 3) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[2]+
+				"would like to send you an offer protect you from robery for " +
+					buisinessCost[2] + "Thank you sire";
+			whichOffer = 2;
+			
+		}
+	}
+	public void offer4(){
+		if (offerType [3] == 1) {
+			buisinessText.text = "Hello Buisiness owner, we here at " + buisinessName [3] +
+				"would like to send you an offer to raise your customaer rate for " +
+				buisinessCost [3] + "Thank you sire";
+			whichOffer = 3;
+			
+		}
+		if (offerType [3] == 2) {
+			buisinessText.text = "Hello Buisiness owner, we here at " + buisinessName [3] +
+				"would like to send you an offer to raise your merchandice quality for " +
+				buisinessCost [3] + "Thank you sire";
+			whichOffer = 3;
+		}
+		if (offerType [3] == 3) {
+			buisinessText.text = "Hello Buisiness owner, we here at " + buisinessName [3] +
+				"would like to send you an offer protect you from robery for " +
+				buisinessCost [3] + "Thank you sire";
+			whichOffer = 3;
+			
+		}
+	}
+		public void offer5(){
+			if (offerType [4] == 1) {
+				buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[4]+
+					"would like to send you an offer to raise your customaer rate for " +
+						buisinessCost[4] + "Thank you sire";
+				whichOffer = 4;
+				
+			}
+			if (offerType [4] == 2) {
+				buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[4]+
+					"would like to send you an offer to raise your merchandice quality for " +
+						buisinessCost[4] + "Thank you sire";
+				whichOffer = 4;
+			}
+			if (offerType [4] == 3) {
+				buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[4]+
+					"would like to send you an offer protect you from robery for " +
+						buisinessCost[4] + "Thank you sire";
+				whichOffer = 4;
+				
+		}
+	}
+	public void offer6(){
+		if (offerType [5] == 1) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[5]+
+				"would like to send you an offer to raise your customaer rate for " +
+					buisinessCost[5] + "Thank you sire";
+			whichOffer = 5;
+			
+		}
+		if (offerType [5] == 2) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[5]+
+				"would like to send you an offer to raise your merchandice quality for " +
+					buisinessCost[5] + "Thank you sire";
+			whichOffer = 5;
+		}
+		if (offerType [5] == 3) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[5]+
+				"would like to send you an offer protect you from robery for " +
+					buisinessCost[5] + "Thank you sire";
+			whichOffer = 5;
+			
+		}
+	}
+	public void offer7(){
+		if (offerType [6] == 1) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[6]+
+				"would like to send you an offer to raise your customaer rate for " +
+					buisinessCost[6] + "Thank you sire";
+			whichOffer = 6;
+			
+		}
+		if (offerType [6] == 2) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[6]+
+				"would like to send you an offer to raise your merchandice quality for " +
+					buisinessCost[6] + "Thank you sire";
+			whichOffer = 6;
+		}
+		if (offerType [6] == 3) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[6]+
+				"would like to send you an offer protect you from robery for " +
+					buisinessCost[6] + "Thank you sire";
+			whichOffer = 6;
+			
+		}
+	}
+	public void offer8(){
+		if (offerType [7] == 1) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[7]+
+				"would like to send you an offer to raise your customaer rate for " +
+					buisinessCost[7] + "Thank you sire";
+			whichOffer = 7;
+			
+		}
+		if (offerType [7] == 2) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[7]+
+				"would like to send you an offer to raise your merchandice quality for " +
+					buisinessCost[7] + "Thank you sire";
+			whichOffer = 7;
+		}
+		if (offerType [7] == 3) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[7]+
+				"would like to send you an offer protect you from robery for " +
+					buisinessCost[7] + "Thank you sire";
+			whichOffer = 7;
+			
+		}
+	}
+	public void offer9(){
+		if (offerType [8] == 1) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[8]+
+				"would like to send you an offer to raise your customaer rate for " +
+					buisinessCost[8] + "Thank you sire";
+			whichOffer = 8;
+			
+		}
+		if (offerType [8] == 2) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[8]+
+				"would like to send you an offer to raise your merchandice quality for " +
+					buisinessCost[8] + "Thank you sire";
+			whichOffer = 8;
+		}
+		if (offerType [8] == 3) {
+			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[8]+
+				"would like to send you an offer protect you from robery for " +
+					buisinessCost[8] + "Thank you sire";
+			whichOffer = 8;
+			
+		}
+	}
+}
+
+
 
