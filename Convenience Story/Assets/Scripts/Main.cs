@@ -6,19 +6,20 @@ using System;
 public class Main : MonoBehaviour {
 	public bool start = true;
 	public float timer = 0.0f;
-	public int customerRate = 1;
-	public float price = 1f;
+	public int customerRate = 2;
+	public float price = 2f;
 	public float cash = 0f;
 	public Text cashUI;
+	public float maintaneinceCosts;
 
 	public int fame = 5;
 	public Text fameUI; 
 	public int advertisementCounter = 0;
-	public float advertisementCost = 1f;
-	public float storeUpgradeCost = 1f;
+	public float advertisementCost = 3f;
+	public float storeUpgradeCost = 20f;
 	public int storeUpgradeCounter = 0;
 
-	public float merchandiceCost = 1f;
+	public float merchandiceCost = 15f;
 	public int merchandiceCounter =0;
 
 	public float eventRobbery= 0;
@@ -78,6 +79,8 @@ public class Main : MonoBehaviour {
 	public GameObject swagText3;
 	Text buisinessText;
 	Text AlertText;
+	public float alertTimer;
+	public bool alertActive;
 
 	public float buff9Timer;
 	public float buff8Timer;
@@ -88,6 +91,9 @@ public class Main : MonoBehaviour {
 	public float buff3Timer;
 	public float buff2Timer;
 	public float buff1Timer;
+	public float eventScam;
+
+	public float fameTimer;
 
 	 void Start () {
 		yesBtn = GameObject.Find ("yesButton");
@@ -120,8 +126,20 @@ public class Main : MonoBehaviour {
 			buisinessPnl.SetActive (false);
 			swagText.SetActive (false);
 			start = false;
-			alertPnl.SetActive(false);
+			alertPnl.SetActive (false);
+			alertActive = false;
+		
 		}
+		maintaneinceCosts = ((fame * 1.1f)-6.0f);
+		if (alertActive) {
+			alertTimer += Time.deltaTime;
+			if(alertTimer > 10){
+				alertPnl.SetActive(false);
+				alertActive = false;
+				alertTimer = 0;
+			}
+		}
+
 		workerBenifit = (workerEffect [0] + workerEffect [1] + workerEffect [2] + workerEffect [3] + workerEffect [4] + 
 			workerEffect [5] + workerEffect [6] + workerEffect [7] + workerEffect [8] + workerEffect [9] + 
 			workerEffect [10] + workerEffect [11] + workerEffect [12] + workerEffect [13] + workerEffect [14] + 
@@ -135,9 +153,21 @@ public class Main : MonoBehaviour {
 		if (customerRate >= 1) {
 			eventBuisiness += Time.deltaTime;
 			timer += Time.deltaTime;
-			eventDisaster += Time.deltaTime;
+			fameTimer += Time.deltaTime;
 			if(!isDescInUse){
 			eventHire += Time.deltaTime;
+			}
+		}
+		if (fameTimer > 20) {
+			if(cash >0){
+			fame +=1;
+			advertisementCost=(fame* 3);
+			fameTimer = 0.0f;
+			}
+			if(cash <0){
+				fame -=1;
+				advertisementCost=(fame* 3);
+				fameTimer = 0.0f;
 			}
 		}
 		if (timer > 10) {//transactions happen every 10s
@@ -145,6 +175,7 @@ public class Main : MonoBehaviour {
 			timer = 0.0f;
 			cash -= workerPay;
 			cash += workerBenifit;
+			cash -= maintaneinceCosts;
 		}
 
 		if (fame > 50 && fame < 100 && (fameEvent1 == true)) {// these are events that happen
@@ -163,49 +194,69 @@ public class Main : MonoBehaviour {
 
 		if (fame < 50) {//robbery with fame; if you can find a better method tellith me
 			eventRobbery += Time.deltaTime;
+			eventDisaster += Time.deltaTime;
 		}
 		if (fame > 50 && fame < 200) {
-			eventRobbery = eventRobbery + (Time.deltaTime * 0.5f);
+			eventRobbery = eventRobbery + (Time.deltaTime * 1.5f);
+			eventDisaster += (Time.deltaTime*1.5f);
 		}
 		if (fame > 200) {
-			eventRobbery = eventRobbery + (Time.deltaTime * 0.25f);
+			eventDisaster += (Time.deltaTime*2.0f);
+			eventRobbery = eventRobbery + (Time.deltaTime * 2.0f);
 		}
 
-		if (eventDisaster > 60) {
-			chancesDisaster = UnityEngine.Random.Range (0, 300);
-			if (chancesDisaster > 0 && chancesDisaster < 5) { //This is a tsunami
+		if (eventDisaster > 67) {
+			chancesDisaster = UnityEngine.Random.Range (0, 100);
+			if (chancesDisaster > 0 && chancesDisaster < 20) { //This is a tsunami
 				storeUpgradeCounter--;					// it nageates the store upgrade.
 				customerRate -= 1;
 				disasterCounter++;
+				alertPnl.SetActive(true);
 				AlertText.text = "You just got hit by a tsumani";
+				alertActive = true;
+				cash -= (fame*2);
 			}
-			if (chancesDisaster > 5 && chancesDisaster < 10) { 
+			if (chancesDisaster > 20 && chancesDisaster < 40) { 
 				merchandiceCounter--;		//this is a earthquake
 				price -= 1;					// it ruins the merchandise
 				disasterCounter++;
+				alertPnl.SetActive(true);
 				AlertText.text = "You just got rocked by an earthquake";
+				alertActive = true;
+				cash -= (fame*2);
 			}
-			if (chancesDisaster > 5 && chancesDisaster < 10) {  //i wana put a volcano here
-				disasterCounter++;		
+			if (chancesDisaster > 40 && chancesDisaster < 60) {  //i wana put a volcano here
+				disasterCounter++;	
+				for(int i = 0; i< 8; i++){
+					buisinessName[i] = " ";
+					buisinessCost[i] = 0.0f;
+					offerType[i] = 0;
+				}
+				buisinessOfferCount = 0;
+				alertPnl.SetActive(true);
+				alertActive = true;
 				AlertText.text = "You just got melted by a volcano";// but we havnt figured out the
+				cash -= (fame*2);
 			}												// other mechanics
 			eventDisaster = 0;	
 
 
 			eventDisaster += Time.deltaTime;//Disasters need rely on fame, they got no chill
 		}
-		if (eventRobbery > 60) {
+		if (eventRobbery > 73) {
 			chancesRobbery = UnityEngine.Random.Range (0,100);
-			if(chancesRobbery > 0	&&	chancesRobbery < 5){
-				cash = cash - (cash * 0.1f);
+			if(chancesRobbery > 0	&&	chancesRobbery < 50){
+				cash = cash - (cash * 0.50f);
 				robberyCounter ++;
+				alertPnl.SetActive(true);
+				alertActive = true;
 				AlertText.text = "You just got robbed";
 			}
 			eventRobbery = 0;
 		}
-		if (eventHire > 2 && workerCount<51) {//Temporary condition to check stuff
+		if (eventHire > 51 && workerCount<51) {//Temporary condition to check stuff
 			chancesHire = UnityEngine.Random.Range ( 0, 100);
-			if(chancesHire > 0 && chancesHire < 50){
+			if(chancesHire > 0 && chancesHire < 41){
 			placeHolderName = randomWorkerNames[(int)UnityEngine.Random.Range(0,30)];
 			swagText.SetActive (true);
 			descText.text = "Would you like to hire " + placeHolderName + "?";
@@ -217,28 +268,34 @@ public class Main : MonoBehaviour {
 			}
 			eventHire = 0;
 		}
-		if (eventBuisiness > 2 && buisinessOfferCount < 9) {
-			buisinessChances = UnityEngine.Random.Range(1,100);
+		if (eventBuisiness >91  && buisinessOfferCount < 8 && cash > 0) {
+			buisinessChances = UnityEngine.Random.Range(0,100);
 			eventBuisiness = 0;
-			if(buisinessChances > 0 && buisinessChances < 30){
+			if(buisinessChances > 0 && buisinessChances < 20){
 				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
-				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*36/7, fame * 49/7);
+				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range ((cash*0.7f), (cash*0.8f));
 				offerType[buisinessOfferCount] = 1;
 				buisinessOfferCount++;
+				alertPnl.SetActive(true);
+				alertActive = true;
 				AlertText.text = "You just got a buisiness offer";
 			}
-			if(buisinessChances > 3 && buisinessChances < 60){
+			if(buisinessChances > 40 && buisinessChances < 60){
 				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
-				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
+				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (cash*0.7f, cash*0.8f);
 				offerType[buisinessOfferCount] = 2;
 				buisinessOfferCount++;
+				alertPnl.SetActive(true);
+				alertActive = true;
 				AlertText.text = "You just got a buisiness offer";
 			}
-			if(buisinessChances > 6 && buisinessChances < 9){
+			if(buisinessChances > 60 && buisinessChances < 80){
 				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
-				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (fame*1/7, fame * 2/7);
+				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (cash*0.7f, cash*0.8f);
 				offerType[buisinessOfferCount] = 3;
 				buisinessOfferCount++;
+				alertPnl.SetActive(true);
+				alertActive = true;
 				AlertText.text = "You just got a buisiness offer";
 			}
 			eventBuisiness = 0;
@@ -248,9 +305,9 @@ public class Main : MonoBehaviour {
 
 	public void storeUpgrade(){// basic shit y'know how it goes fam
 		if (storeUpgradeCost < cash) {
-			customerRate+=1;
+			customerRate*=(int)15/7;
 			cash-=storeUpgradeCost;
-			storeUpgradeCost*=1;
+			storeUpgradeCost*=2f;
 			storeUpgradeCounter++;
 		}
 	}
@@ -258,15 +315,14 @@ public class Main : MonoBehaviour {
 		if (merchandiceCost < cash) {
 			price += 1;
 			cash -= merchandiceCost;
-			merchandiceCost*=1;
+			merchandiceCost*=2f;
 			merchandiceCounter++;
 				}
 			}
 	public void advertisementUpgrade(){// fame upgrade
 		if (advertisementCost < cash) {
-			fame += 1;
+			fame =(int)(fame*1.5f);
 			cash -= advertisementCost;
-			advertisementCost*=1;
 			advertisementCounter++;
 		}
 	}
@@ -279,8 +335,8 @@ public class Main : MonoBehaviour {
 	}
 	public void newWorker(){// setting up the workers
 		workerNames [workerCount] = placeHolderName;
-		workerCost [workerCount] = UnityEngine.Random.Range (fame - 5, fame + 5);
-		workerEffect [workerCount] = (int)UnityEngine.Random.Range (fame - 4, fame + 5);
+		workerCost [workerCount] = UnityEngine.Random.Range (fame*6/7, fame *13/7);
+		workerEffect [workerCount] = (int)UnityEngine.Random.Range (fame* 13/7, fame + 15/7);
 		workerCount ++;
 	}
 	public void noButton(){
@@ -334,7 +390,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [0] != 0) {
 		whichworker = 0;
 		descText.text = "Name: " + workerNames[0] + "\n Cost for worker: " +workerCost[0]+ "\n" +
-			"Customer rate increased by: "+ workerEffect[0];
+			"Worker help raises : "+ workerEffect[0];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -718,53 +774,68 @@ public class Main : MonoBehaviour {
 		}
 	}
 	public void acceptBtn(){
-		if (offerType [whichOffer] == 1) {
-			if (cash > buisinessCost [whichOffer]) {
-				cash -= buisinessCost [whichOffer];
-				buff9Timer += Time.deltaTime;
-				while(buff9Timer<60){
-					customerRate=(int)(customerRate*9/7);
-				}
-				customerRate = (int)(customerRate*7/9);
-			}
-		}
-		if (offerType [whichOffer] == 2) {
-			if (cash > buisinessCost [whichOffer]) {
-				cash -= buisinessCost [whichOffer];
-				buff9Timer += Time.deltaTime;
-				while(buff9Timer<60){
-					merchandiceCost=(merchandiceCost*9/7);
-				}
-				merchandiceCost= (merchandiceCost*7/9);
-			}
-		}
-		if (offerType [whichOffer] == 3) {
-			if (cash > buisinessCost [whichOffer]) {
-				cash -= buisinessCost [whichOffer];
-				buff9Timer += Time.deltaTime;
-				while(buff9Timer<60){
-					eventRobbery-= Time.deltaTime;
-				}
-			}
-		}
 		if (cash > buisinessCost [whichOffer]) {
 			buisinessName [8] = " ";
-			buisinessCost [8] = 0;
+			buisinessCost [8] = 0.0f;
 			offerType [8] = 0;
 			offerType [whichOffer] = -1;
 			for (int i = 0; i<8; i++) {
 				if (offerType [i] == -1) {
-					for (int j = i; j < (8-j); j++) {
+					for (int j = i; j <= (8-j); j++) {
 						buisinessCost [j] = buisinessCost [j + 1];
 						buisinessName [j] = buisinessName [j + 1];
 						offerType [j] = offerType [j + 1];
 						buisinessText.text = " ";
 					}
-				
+					
 				}
 			}
 		}
+		eventScam = UnityEngine.Random.Range (0, 100);
+		if (eventScam > 65) {
+			if (cash > buisinessCost [whichOffer]) {
+				cash -= buisinessCost[whichOffer];
+				alertPnl.SetActive (true);
+				buisinessText.text = "You have been scammed of your earnings. Big Sorry!";
+				alertActive = true;
+			}
+		}
+		else {
+		
+			if (offerType [whichOffer] == 1) {
+				if (cash > buisinessCost [whichOffer]) {
+					cash -= buisinessCost [whichOffer];
+					buff9Timer += Time.deltaTime;
+					customerRate = (int)(customerRate * 3 / 2);
+					if (buff9Timer > 30) {
+						customerRate = (int)(customerRate * 2 / 3);
+					}
+				}
+			}
+			if (offerType [whichOffer] == 2) {
+				if (cash > buisinessCost [whichOffer]) {
+					cash -= buisinessCost [whichOffer];
+					buff9Timer += Time.deltaTime;
+					price = (price * 3 / 2);
+					if (buff9Timer > 30) {
+						price = (price * 2 / 3);
+					}
+				}
+			}
+			if (offerType [whichOffer] == 3) {
+				if (cash > buisinessCost [whichOffer]) {
+					cash -= buisinessCost [whichOffer];
+					buff9Timer += Time.deltaTime;
+					while (buff9Timer<60) {
+						eventRobbery -= Time.deltaTime;
+					}
+				}
+			}
+		}
+	
+		
 	}
+	
 	public void declineButton(){
 		buisinessName [8] = " ";
 		buisinessCost [8] = 0.0f;
@@ -786,7 +857,6 @@ public class Main : MonoBehaviour {
 		buisinessPnl.SetActive (true);
 		selectorPnl.SetActive (false);
 		Time.timeScale = 0;
-		Debug.Log (eventRobbery);
 	}
 	public void offer2(){
 		if (offerType [1] == 1) {
