@@ -16,11 +16,13 @@ public class InformationUI : MonoBehaviour {
 	private GameObject Swag3;
 	private GameObject Swag4;
 	private GameObject Swag5;
+	private GameObject swag6;
 	Text cashTxt;	
 	Text fameTxt;
 	Text timeTxt;
 	Text priceTxt;
 	Text levelTxt;
+	Text upKeepTxt;
 
 	void Start () {
 
@@ -33,18 +35,18 @@ public class InformationUI : MonoBehaviour {
 		timeTxt =  Swag3.GetComponent<Text>();
 		Swag4 = GameObject.Find("priceUI");
 		priceTxt =  Swag4.GetComponent<Text>();
-		Swag5 = GameObject.Find("storeLevelUI");
-		levelTxt =  Swag5.GetComponent<Text>();
+
+
 	}
 	
 	void Update () {
 		timer += Time.deltaTime;
 		seconds = Mathf.FloorToInt (timer);    
-		if (seconds > 60) {
+		if (seconds > 59) {
 			minutes ++;
 			timer = 0; 
 		}
-		if (minutes > 60) {
+		if (minutes > 59) {
 			hours ++;
 			timer = 0;
 		}
@@ -53,6 +55,7 @@ public class InformationUI : MonoBehaviour {
 		fameTxt.text = "Fame: " + main.fame;
 		timeTxt.text = "Time Elapsed: "+ hours+":"+minutes+":"+seconds;//time elapsed
 		priceTxt.text = "Price: $" + main.price;// price of materials
-		levelTxt.text = "Store Level :" + main.storeUpgradeCounter;// to keep tracj of store levels
+		levelTxt.text = "Store Level: " + main.storeUpgradeCounter;// to keep tracj of store levels
+
 }
 }

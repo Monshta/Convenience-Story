@@ -2,7 +2,26 @@
 using UnityEngine.UI;
 using System.Collections;
 using System;
+public class Disaster{
+	public float chancesDisaster;
+	public Disaster(){
+	}
+	public int which(){
+		chancesDisaster = UnityEngine.Random.Range (0, 10);
+		if (chancesDisaster >= 0 && chancesDisaster < 2) {
+			return 1;
+		}
+		if (chancesDisaster >= 2 && chancesDisaster < 4) {
+			return 2;
+		}
+		if (chancesDisaster >= 4 && chancesDisaster < 6) {
+			return 3;
+		} else 
+			return 0;
+	}
 
+
+}
 public class Main : MonoBehaviour {
 	public bool start = true;
 	public float timer = 0.0f;
@@ -94,8 +113,12 @@ public class Main : MonoBehaviour {
 	public float eventScam;
 
 	public float fameTimer;
+	public GameObject swag6;
+	Text upKeepTxt;
+
 
 	 void Start () {
+
 		yesBtn = GameObject.Find ("yesButton");
 		noBtn = GameObject.Find ("noButton");
 		fireBtn = GameObject.Find ("fireButton");
@@ -109,13 +132,16 @@ public class Main : MonoBehaviour {
 		descText = swagText.GetComponent<Text> ();
 		buisinessText = swagText2.GetComponent<Text> ();
 		swagText = GameObject.Find ("BuisinessTxt");
-		swagText = GameObject.Find ("AlertTxt");
+		swagText3 = GameObject.Find ("AlertTxt");
 		AlertText = swagText3.GetComponent<Text> ();
-	
+		swag6 = GameObject.Find ("upKeepUI");
+		upKeepTxt = swag6.GetComponent<Text> ();
 	}
 	
 
 	void Update () {
+		maintaneinceCosts = ((fame * 1.1f)-6.0f);
+		upKeepTxt.text = "Upkeep Cost: " + (Mathf.Round(maintaneinceCosts * 100f) / 100f);
 		if (start == true) {
 			yesBtn.SetActive (false);
 			noBtn.SetActive (false);
@@ -130,7 +156,7 @@ public class Main : MonoBehaviour {
 			alertActive = false;
 		
 		}
-		maintaneinceCosts = ((fame * 1.1f)-6.0f);
+
 		if (alertActive) {
 			alertTimer += Time.deltaTime;
 			if(alertTimer > 10){
@@ -205,27 +231,18 @@ public class Main : MonoBehaviour {
 			eventRobbery = eventRobbery + (Time.deltaTime * 2.0f);
 		}
 
-		if (eventDisaster > 67) {
+		if (eventDisaster > 77) {
 			chancesDisaster = UnityEngine.Random.Range (0, 100);
-			if (chancesDisaster > 0 && chancesDisaster < 20) { //This is a tsunami
-				storeUpgradeCounter--;					// it nageates the store upgrade.
-				customerRate -= 1;
-				disasterCounter++;
-				alertPnl.SetActive(true);
-				AlertText.text = "You just got hit by a tsumani";
-				alertActive = true;
-				cash -= (fame*2);
-			}
-			if (chancesDisaster > 20 && chancesDisaster < 40) { 
+			Disaster distaster = new Disaster();
+			if (distaster.which() == 1) { 
 				merchandiceCounter--;		//this is a earthquake
 				price -= 1;					// it ruins the merchandise
 				disasterCounter++;
 				alertPnl.SetActive(true);
-				AlertText.text = "You just got rocked by an earthquake";
-				alertActive = true;
+				AlertText.text = "EARTHQUAKE!";
 				cash -= (fame*2);
 			}
-			if (chancesDisaster > 40 && chancesDisaster < 60) {  //i wana put a volcano here
+			if (distaster.which () == 2) {  //i wana put a volcano here
 				disasterCounter++;	
 				for(int i = 0; i< 8; i++){
 					buisinessName[i] = " ";
@@ -237,11 +254,19 @@ public class Main : MonoBehaviour {
 				alertActive = true;
 				AlertText.text = "You just got melted by a volcano";// but we havnt figured out the
 				cash -= (fame*2);
-			}												// other mechanics
+			}	
+			if(distaster.which() == 3){
+				customerRate -= 1;
+				alertPnl.SetActive(true);
+				alertActive = true;
+				AlertText.text = "You got washed by a tsunami";
+				cash -= (fame*2);
+			}// other mechanics
 			eventDisaster = 0;	
+			Debug.Log(AlertText.text);
+			Debug.Log(distaster.which());
 
-
-			eventDisaster += Time.deltaTime;//Disasters need rely on fame, they got no chill
+			//Disasters need rely on fame, they got no chill
 		}
 		if (eventRobbery > 73) {
 			chancesRobbery = UnityEngine.Random.Range (0,100);
