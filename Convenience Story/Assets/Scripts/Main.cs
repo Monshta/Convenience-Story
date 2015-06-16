@@ -116,6 +116,8 @@ public class Main : MonoBehaviour {
 	public GameObject swag6;
 	Text upKeepTxt;
 
+	public float realTime;
+
 
 	 void Start () {
 
@@ -139,6 +141,7 @@ public class Main : MonoBehaviour {
 	
 
 	void Update () {
+		realTime += Time.deltaTime;
 		if (cash < -100) {
 			alertPnl.SetActive(true);
 			AlertText.text = "GAME OVER!";
@@ -1092,6 +1095,110 @@ public class Main : MonoBehaviour {
 		Time.timeScale = 3;
 	}
 	public void singleSpeed(){
+		Time.timeScale = 1;
+	}
+	public void pauseButton(){
+		Time.timeScale = 0;
+	}
+	public void saveButton(){
+		Time.timeScale = 0;
+		PlayerPrefs.SetInt ("fame", fame);
+		PlayerPrefs.SetFloat ("cash", cash);
+		PlayerPrefs.SetInt ("customerRate", customerRate);
+		PlayerPrefs.SetFloat ("price", price);
+		PlayerPrefs.SetFloat ("advertisementCost",advertisementCost);
+		PlayerPrefs.SetFloat ("storeupgradeCost", storeUpgradeCost);
+		PlayerPrefs.SetFloat ("merchandiceUpgradeCost", merchandiceCost);
+		PlayerPrefs.SetInt ("workerCount", workerCount);
+		PlayerPrefs.SetFloat ("RealTime", realTime);
+
+		PlayerPrefs.SetString ("workerName1", workerNames [0]);
+		PlayerPrefs.SetFloat ("workerCost1", workerCost [0]);
+		PlayerPrefs.SetInt("workerEffect1", workerEffect[0]);
+		PlayerPrefs.SetString ("workerName2", workerNames[1]);
+		PlayerPrefs.SetFloat ("workerCost2", workerCost [1]);
+		PlayerPrefs.SetInt("workerEffect2", workerEffect[1]);
+		PlayerPrefs.SetString ("workerName3", workerNames[2]);
+		PlayerPrefs.SetFloat ("workerCost3", workerCost [2]);
+		PlayerPrefs.SetInt("workerEffect3", workerEffect[2]);
+		PlayerPrefs.SetString ("workerName4", workerNames[3]);
+		PlayerPrefs.SetFloat ("workerCost4", workerCost [3]);
+		PlayerPrefs.SetInt("workerEffect4", workerEffect[3]);
+		PlayerPrefs.SetString ("workerName5", workerNames [4]);
+		PlayerPrefs.SetFloat ("workerCost5", workerCost [4]);
+		PlayerPrefs.SetInt("workerEffect5", workerEffect[4]);
+		PlayerPrefs.SetString ("workerName6", workerNames[5]);
+		PlayerPrefs.SetFloat ("workerCost6", workerCost [5]);
+		PlayerPrefs.SetInt("workerEffect6", workerEffect[5]);
+		PlayerPrefs.SetString ("workerName7", workerNames[6]);
+		PlayerPrefs.SetFloat ("workerCost7", workerCost [6]);
+		PlayerPrefs.SetInt("workerEffect7", workerEffect[6]);
+		PlayerPrefs.SetString ("workerName8", workerNames[7]);
+		PlayerPrefs.SetFloat ("workerCost8", workerCost [7]);
+		PlayerPrefs.SetInt("workerEffect8", workerEffect[7]);
+		PlayerPrefs.SetString ("workerName9", workerNames [8]);
+		PlayerPrefs.SetFloat ("workerCost9", workerCost [8]);
+		PlayerPrefs.SetInt("workerEffect9", workerEffect[8]);
+		PlayerPrefs.SetString ("workerName10", workerNames[9]);
+		PlayerPrefs.SetFloat ("workerCost10", workerCost [9]);
+		PlayerPrefs.SetInt("workerEffect10", workerEffect[9]);
+		PlayerPrefs.SetString ("workerName11", workerNames[10]);
+		PlayerPrefs.SetFloat ("workerCost11", workerCost [10]);
+		PlayerPrefs.SetInt("workerEffect11", workerEffect[10]);
+		PlayerPrefs.SetString ("workerName12", workerNames[11]);
+		PlayerPrefs.SetFloat ("workerCost12", workerCost [11]);
+		PlayerPrefs.SetInt("workerEffect12", workerEffect[11]);
+		PlayerPrefs.SetString ("workerName13", workerNames [12]);
+		PlayerPrefs.SetFloat ("workerCost13", workerCost [12]);
+		PlayerPrefs.SetInt("workerEffect13", workerEffect[12]);
+		PlayerPrefs.SetString ("workerName14", workerNames[13]);
+		PlayerPrefs.SetFloat ("workerCost14", workerCost [13]);
+		PlayerPrefs.SetInt("workerEffect14", workerEffect[13]);
+		PlayerPrefs.SetString ("workerName15", workerNames[14]);
+		PlayerPrefs.SetFloat ("workerCost15", workerCost [14]);
+		PlayerPrefs.SetInt("workerEffect15", workerEffect[14]);
+		PlayerPrefs.SetString ("workerName16", workerNames[15]);
+		PlayerPrefs.SetFloat ("workerCost16", workerCost [15]);
+		PlayerPrefs.SetInt("workerEffect16", workerEffect[15]);
+		PlayerPrefs.SetString ("workerName17", workerNames[16]);
+		PlayerPrefs.SetFloat ("workerCost17", workerCost [16]);
+		PlayerPrefs.SetInt("workerEffect17", workerEffect[16]);
+		PlayerPrefs.SetString ("workerName18", workerNames [17]);
+		PlayerPrefs.SetFloat ("workerCost18", workerCost [17]);
+		PlayerPrefs.SetInt("workerEffect18", workerEffect[17]);
+		PlayerPrefs.SetString ("workerName19", workerNames[18]);
+		PlayerPrefs.SetFloat ("workerCost19", workerCost [18]);
+		PlayerPrefs.SetInt("workerEffect19", workerEffect[18]);
+		PlayerPrefs.SetString ("workerName20", workerNames[19]);
+		PlayerPrefs.SetFloat ("workerCost20", workerCost [19]);
+		PlayerPrefs.SetInt("workerEffect20", workerEffect[19]);
+
+		PlayerPrefs.SetString ("offername1", buisinessName [0]);
+		PlayerPrefs.SetInt ("offertype1", offerType [0]);
+		PlayerPrefs.SetFloat ("offercost1", buisinessCost [0]);
+		PlayerPrefs.SetString ("offername2", buisinessName [1]);
+		PlayerPrefs.SetInt ("offertype2", offerType [1]);
+		PlayerPrefs.SetFloat ("offercost2", buisinessCost [1]);
+		PlayerPrefs.SetString ("offername3", buisinessName [2]);
+		PlayerPrefs.SetInt ("offertype3", offerType [2]);
+		PlayerPrefs.SetFloat ("offercost3", buisinessCost [2]);
+		PlayerPrefs.SetString ("offername4", buisinessName [3]);
+		PlayerPrefs.SetInt ("offertype4", offerType [3]);
+		PlayerPrefs.SetFloat ("offercost4", buisinessCost [3]);
+		PlayerPrefs.SetString ("offername5", buisinessName [4]);
+		PlayerPrefs.SetInt ("offertype5", offerType [4]);
+		PlayerPrefs.SetFloat ("offercost5", buisinessCost [4]);
+		PlayerPrefs.SetString ("offername6", buisinessName [5]);
+		PlayerPrefs.SetInt ("offertype6", offerType [5]);
+		PlayerPrefs.SetFloat ("offercost6", buisinessCost [5]);
+		PlayerPrefs.SetString ("offername7", buisinessName [6]);
+		PlayerPrefs.SetInt ("offertype7", offerType [6]);
+		PlayerPrefs.SetFloat ("offercost7", buisinessCost [6]);
+		PlayerPrefs.SetString ("offername8", buisinessName [7]);
+		PlayerPrefs.SetInt ("offertype8", offerType [7]);
+		PlayerPrefs.SetFloat ("offercost8", buisinessCost [7]);
+		
+		PlayerPrefs.Save ();
 		Time.timeScale = 1;
 	}
 
