@@ -35,10 +35,10 @@ public class Main : MonoBehaviour {
 	public Text fameUI; 
 	public int advertisementCounter = 0;
 	public float advertisementCost = 3f;
-	public float storeUpgradeCost = 20f;
+	public float storeUpgradeCost = 15f;
 	public int storeUpgradeCounter = 0;
 
-	public float merchandiceCost = 15f;
+	public float merchandiceCost = 10f;
 	public int merchandiceCounter =0;
 
 	public float eventRobbery= 0;
@@ -134,14 +134,28 @@ public class Main : MonoBehaviour {
 		swagText = GameObject.Find ("BuisinessTxt");
 		swagText3 = GameObject.Find ("AlertTxt");
 		AlertText = swagText3.GetComponent<Text> ();
-		swag6 = GameObject.Find ("upKeepUI");
-		upKeepTxt = swag6.GetComponent<Text> ();
+
 	}
 	
 
 	void Update () {
-		maintaneinceCosts = ((fame * 1.1f)-6.0f);
-		upKeepTxt.text = "Upkeep Cost: " + (Mathf.Round(maintaneinceCosts * 100f) / 100f);
+		if (cash < -100) {
+			alertPnl.SetActive(true);
+			AlertText.text = "GAME OVER!";
+			Time.timeScale = 0;
+		}
+		if (fame > 5) {
+			maintaneinceCosts = ((fame * 1.3f) - 6.0f);
+		}
+		if (fame < 0) {
+			fame = 0;
+		}
+		if (customerRate < 0) {
+			customerRate = 1;
+		}
+		if (price < 0) {
+			price = 1;
+		}
 		if (start == true) {
 			yesBtn.SetActive (false);
 			noBtn.SetActive (false);
@@ -194,6 +208,18 @@ public class Main : MonoBehaviour {
 				fame -=1;
 				advertisementCost=(fame* 3);
 				fameTimer = 0.0f;
+			}
+			if( cash > 30){
+				fame+=  1;
+			}
+			if(cash > 80){
+				fame += 1;
+			}
+			if(cash > 150){
+				fame +=1;
+			}
+			if(cash > 300){
+				fame +=1;
 			}
 		}
 		if (timer > 10) {//transactions happen every 10s
@@ -268,7 +294,7 @@ public class Main : MonoBehaviour {
 
 			//Disasters need rely on fame, they got no chill
 		}
-		if (eventRobbery > 73) {
+		if (eventRobbery > 73 && cash > 0) {
 			chancesRobbery = UnityEngine.Random.Range (0,100);
 			if(chancesRobbery > 0	&&	chancesRobbery < 50){
 				cash = cash - (cash * 0.50f);
@@ -307,7 +333,7 @@ public class Main : MonoBehaviour {
 			}
 			if(buisinessChances > 40 && buisinessChances < 60){
 				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
-				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (cash*0.7f, cash*0.8f);
+				buisinessCost[buisinessOfferCount] = (Mathf.Round((UnityEngine.Random.Range (cash*0.7f, cash*0.8f))*100)/100);
 				offerType[buisinessOfferCount] = 2;
 				buisinessOfferCount++;
 				alertPnl.SetActive(true);
@@ -330,18 +356,20 @@ public class Main : MonoBehaviour {
 
 	public void storeUpgrade(){// basic shit y'know how it goes fam
 		if (storeUpgradeCost < cash) {
-			customerRate*=(int)15/7;
+			customerRate+= 2;
 			cash-=storeUpgradeCost;
-			storeUpgradeCost*=2f;
+			storeUpgradeCost*=1.5f;
 			storeUpgradeCounter++;
+			fame +=2;
 		}
 	}
 	public void merchandiceUpgrade(){
 		if (merchandiceCost < cash) {
-			price += 1;
+			price += 1.5f;
 			cash -= merchandiceCost;
-			merchandiceCost*=2f;
+			merchandiceCost*=1.5f;
 			merchandiceCounter++;
+			fame +=1;
 				}
 			}
 	public void advertisementUpgrade(){// fame upgrade
@@ -775,21 +803,21 @@ public class Main : MonoBehaviour {
 	public void offer1(){
 		if (offerType [0] == 1) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[0]+
-				"would like to send you an offer to raise your customaer rate for " +
+				" would like to send you an offer to raise your customaer rate for " +
 				buisinessCost[0] + "Thank you sire";
 			whichOffer = 0;
 
 		}
 		if (offerType [0] == 2) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[0]+
-				"would like to send you an offer to raise your merchandice quality for " +
+				" ewould like to send you an offer to raise your merchandice quality for " +
 					buisinessCost[0] + "Thank you sire";
 			whichOffer = 0;
 			
 		}
 		if (offerType [0] == 3) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[0]+
-				"would like to send you an offer protect you from robery for " +
+				" would like to send you an offer protect you from robery for " +
 					buisinessCost[0] + "Thank you sire";
 			whichOffer = 0;
 			
@@ -886,20 +914,20 @@ public class Main : MonoBehaviour {
 	public void offer2(){
 		if (offerType [1] == 1) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[1]+
-				"would like to send you an offer to raise your customaer rate for " +
+				" would like to send you an offer to raise your customaer rate for " +
 					buisinessCost[1] + "Thank you sire";
 			whichOffer = 1;
 			
 		}
 		if (offerType [1] == 2) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[1]+
-				"would like to send you an offer to raise your merchandice quality for " +
+				" would like to send you an offer to raise your merchandice quality for " +
 					buisinessCost[1] + "Thank you sire";
 			whichOffer = 1;
 		}
 		if (offerType [1] == 3) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[1]+
-				"would like to send you an offer protect you from robery for " +
+				" would like to send you an offer protect you from robery for " +
 					buisinessCost[1] + "Thank you sire";
 			whichOffer = 1;
 			}
@@ -910,20 +938,20 @@ public class Main : MonoBehaviour {
 	public void offer3(){
 		if (offerType [2] == 1) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[2]+
-				"would like to send you an offer to raise your customaer rate for " +
+				" would like to send you an offer to raise your customaer rate for " +
 					buisinessCost[2] + "Thank you sire";
 			whichOffer = 2;
 			
 		}
 		if (offerType [2] == 2) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[2]+
-				"would like to send you an offer to raise your merchandice quality for " +
+				" would like to send you an offer to raise your merchandice quality for " +
 					buisinessCost[2] + "Thank you sire";
 			whichOffer = 2;
 		}
 		if (offerType [2] == 3) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[2]+
-				"would like to send you an offer protect you from robery for " +
+				" would like to send you an offer protect you from robery for " +
 					buisinessCost[2] + "Thank you sire";
 			whichOffer = 2;
 			
@@ -935,20 +963,20 @@ public class Main : MonoBehaviour {
 	public void offer4(){
 		if (offerType [3] == 1) {
 			buisinessText.text = "Hello Buisiness owner, we here at " + buisinessName [3] +
-				"would like to send you an offer to raise your customaer rate for " +
+				" would like to send you an offer to raise your customaer rate for " +
 				buisinessCost [3] + "Thank you sire";
 			whichOffer = 3;
 			
 		}
 		if (offerType [3] == 2) {
 			buisinessText.text = "Hello Buisiness owner, we here at " + buisinessName [3] +
-				"would like to send you an offer to raise your merchandice quality for " +
+				" would like to send you an offer to raise your merchandice quality for " +
 				buisinessCost [3] + "Thank you sire";
 			whichOffer = 3;
 		}
 		if (offerType [3] == 3) {
 			buisinessText.text = "Hello Buisiness owner, we here at " + buisinessName [3] +
-				"would like to send you an offer protect you from robery for " +
+				" would like to send you an offer protect you from robery for " +
 				buisinessCost [3] + "Thank you sire";
 			whichOffer = 3;
 			
@@ -960,20 +988,20 @@ public class Main : MonoBehaviour {
 		public void offer5(){
 			if (offerType [4] == 1) {
 				buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[4]+
-					"would like to send you an offer to raise your customaer rate for " +
+					" would like to send you an offer to raise your customaer rate for " +
 						buisinessCost[4] + "Thank you sire";
 				whichOffer = 4;
 				
 			}
 			if (offerType [4] == 2) {
 				buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[4]+
-					"would like to send you an offer to raise your merchandice quality for " +
+					" would like to send you an offer to raise your merchandice quality for " +
 						buisinessCost[4] + "Thank you sire";
 				whichOffer = 4;
 			}
 			if (offerType [4] == 3) {
 				buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[4]+
-					"would like to send you an offer protect you from robery for " +
+					" would like to send you an offer protect you from robery for " +
 						buisinessCost[4] + "Thank you sire";
 				whichOffer = 4;
 				
@@ -985,20 +1013,20 @@ public class Main : MonoBehaviour {
 	public void offer6(){
 		if (offerType [5] == 1) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[5]+
-				"would like to send you an offer to raise your customaer rate for " +
+				" would like to send you an offer to raise your customaer rate for " +
 					buisinessCost[5] + "Thank you sire";
 			whichOffer = 5;
 			
 		}
 		if (offerType [5] == 2) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[5]+
-				"would like to send you an offer to raise your merchandice quality for " +
+				" would like to send you an offer to raise your merchandice quality for " +
 					buisinessCost[5] + "Thank you sire";
 			whichOffer = 5;
 		}
 		if (offerType [5] == 3) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[5]+
-				"would like to send you an offer protect you from robery for " +
+				" would like to send you an offer protect you from robery for " +
 					buisinessCost[5] + "Thank you sire";
 			whichOffer = 5;
 			
@@ -1010,20 +1038,20 @@ public class Main : MonoBehaviour {
 	public void offer7(){
 		if (offerType [6] == 1) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[6]+
-				"would like to send you an offer to raise your customaer rate for " +
+				" would like to send you an offer to raise your customaer rate for " +
 					buisinessCost[6] + "Thank you sire";
 			whichOffer = 6;
 			
 		}
 		if (offerType [6] == 2) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[6]+
-				"would like to send you an offer to raise your merchandice quality for " +
+				" would like to send you an offer to raise your merchandice quality for " +
 					buisinessCost[6] + "Thank you sire";
 			whichOffer = 6;
 		}
 		if (offerType [6] == 3) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[6]+
-				"would like to send you an offer protect you from robery for " +
+				" would like to send you an offer protect you from robery for " +
 					buisinessCost[6] + "Thank you sire";
 			whichOffer = 6;
 			
@@ -1035,20 +1063,20 @@ public class Main : MonoBehaviour {
 	public void offer8(){
 		if (offerType [7] == 1) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[7]+
-				"would like to send you an offer to raise your customaer rate for " +
+				" would like to send you an offer to raise your customaer rate for " +
 					buisinessCost[7] + "Thank you sire";
 			whichOffer = 7;
 			
 		}
 		if (offerType [7] == 2) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[7]+
-				"would like to send you an offer to raise your merchandice quality for " +
+				" would like to send you an offer to raise your merchandice quality for " +
 					buisinessCost[7] + "Thank you sire";
 			whichOffer = 7;
 		}
 		if (offerType [7] == 3) {
 			buisinessText.text = "Hello Buisiness owner, we here at "+ buisinessName[7]+
-				"would like to send you an offer protect you from robery for " +
+				" would like to send you an offer protect you from robery for " +
 					buisinessCost[7] + "Thank you sire";
 			whichOffer = 7;
 			
@@ -1056,6 +1084,15 @@ public class Main : MonoBehaviour {
 		if (offerType [7] == 0) {
 			buisinessText.text = " ";
 		}
+	}
+	public void doubleSpeed(){
+		Time.timeScale = 2;
+	}
+	public void tripleSpeed(){
+		Time.timeScale = 3;
+	}
+	public void singleSpeed(){
+		Time.timeScale = 1;
 	}
 
 }

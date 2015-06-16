@@ -35,6 +35,10 @@ public class InformationUI : MonoBehaviour {
 		timeTxt =  Swag3.GetComponent<Text>();
 		Swag4 = GameObject.Find("priceUI");
 		priceTxt =  Swag4.GetComponent<Text>();
+		Swag5 = GameObject.Find ("storeLevelUI");
+		levelTxt = Swag5.GetComponent<Text> ();
+		swag6 = GameObject.Find ("upKeepUI");
+		upKeepTxt = swag6.GetComponent<Text> ();
 
 
 	}
@@ -56,6 +60,7 @@ public class InformationUI : MonoBehaviour {
 		timeTxt.text = "Time Elapsed: "+ hours+":"+minutes+":"+seconds;//time elapsed
 		priceTxt.text = "Price: $" + main.price;// price of materials
 		levelTxt.text = "Store Level: " + main.storeUpgradeCounter;// to keep tracj of store levels
+		upKeepTxt.text = "Upkeep Cost: " + (Mathf.Round(main.maintaneinceCosts* 100f) / 100f);
 
 }
 }
