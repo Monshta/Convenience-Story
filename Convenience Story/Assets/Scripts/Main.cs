@@ -151,7 +151,7 @@ public class Main : MonoBehaviour {
 			maintaneinceCosts = ((fame * 1.3f) - 6.0f);
 		}
 		if (fame < 0) {
-			fame = 0;
+			fame = 1;
 		}
 		if (customerRate < 1) {
 			customerRate = 1;
@@ -367,7 +367,7 @@ public class Main : MonoBehaviour {
 		if (storeUpgradeCost < cash) {
 			customerRate+= 2;
 			cash-=storeUpgradeCost;
-			storeUpgradeCost=(storeUpgradeCost*1.5f) +cash*0.5f;
+			storeUpgradeCost=(storeUpgradeCost*1.5f) +Mathf.Abs(cash*0.5f);
 			storeUpgradeCounter++;
 			fame +=2;
 		}
@@ -376,7 +376,7 @@ public class Main : MonoBehaviour {
 		if (merchandiceCost < cash) {
 			price += 1.5f;
 			cash -= merchandiceCost;
-			merchandiceCost=merchandiceCost*1.5f + cash*0.5f;
+			merchandiceCost=merchandiceCost*1.5f + Mathf.Abs (cash*0.5f);
 			merchandiceCounter++;
 			fame +=1;
 				}
@@ -397,8 +397,8 @@ public class Main : MonoBehaviour {
 	}
 	public void newWorker(){// setting up the workers
 		workerNames [workerCount] = placeHolderName;
-		workerCost [workerCount] = UnityEngine.Random.Range (fame*6/7, fame *13/7);
-		workerEffect [workerCount] = (int)UnityEngine.Random.Range (fame* 13/7, fame + 15/7);
+		workerCost [workerCount] = UnityEngine.Random.Range (fame*7/7, fame *13/7);
+		workerEffect [workerCount] = (int)UnityEngine.Random.Range (fame* 14/7, fame + 15/7);
 		workerCount ++;
 	}
 	public void noButton(){
@@ -436,7 +436,6 @@ public class Main : MonoBehaviour {
 		upgradePnl.SetActive (false);
 		workerPnl.SetActive (false);
 		buisinessPnl.SetActive (false);
-		Time.timeScale = 1;
 	}
 	public void toWorkerPanel(){
 		workerPnl.SetActive (true);
@@ -470,7 +469,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [1] != 0) {
 			whichworker = 1;
 			descText.text = "Name: " + workerNames[1] + "\n Cost for worker: " +workerCost[1]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[1];
+				"Worker help raises : "+ workerEffect[1];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -488,7 +487,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [2] != 0) {
 			whichworker = 2;
 			descText.text = "Name: " + workerNames[2] + "\n Cost for worker: " +workerCost[2]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[2];
+				"Worker help raises : "+ workerEffect[2];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -506,7 +505,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [3] != 0) {
 			whichworker = 3;
 			descText.text = "Name: " + workerNames[3] + "\n Cost for worker: " +workerCost[3]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[3];
+				"Worker help raises : "+ workerEffect[3];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -524,7 +523,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [4] != 0) {
 			whichworker = 4;
 			descText.text = "Name: " + workerNames[4] + "\n Cost for worker: " +workerCost[4]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[4];
+				"Worker help raises :  "+ workerEffect[4];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -542,7 +541,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [5] != 0) {
 			whichworker = 5;
 			descText.text = "Name: " + workerNames[5] + "\n Cost for worker: " +workerCost[5]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[5];
+				"Worker help raises : "+ workerEffect[5];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -560,7 +559,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [6] != 0) {
 			whichworker = 6;
 			descText.text = "Name: " + workerNames[6] + "\n Cost for worker: " +workerCost[6]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[6];
+				"Worker help raises : "+ workerEffect[6];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -578,7 +577,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [7] != 0) {
 			whichworker = 7;
 			descText.text = "Name: " + workerNames[7] + "\n Cost for worker: " +workerCost[7]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[7];
+				"Worker help raises :  "+ workerEffect[7];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -596,7 +595,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [8] != 0) {
 			whichworker = 8;
 			descText.text = "Name: " + workerNames[8] + "\n Cost for worker: " +workerCost[8]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[8];
+				"Worker help raises : "+ workerEffect[8];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -614,7 +613,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [9] != 0) {
 			whichworker = 9;
 			descText.text = "Name: " + workerNames[9] + "\n Cost for worker: " +workerCost[9]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[9];
+				"Worker help raises : "+ workerEffect[9];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -632,7 +631,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [10] != 0) {
 			whichworker = 10;
 			descText.text = "Name: " + workerNames[10] + "\n Cost for worker: " +workerCost[10]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[10];
+				"Worker help raises : "+ workerEffect[10];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -650,7 +649,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [11] != 0) {
 			whichworker = 11;
 			descText.text = "Name: " + workerNames[11] + "\n Cost for worker: " +workerCost[11]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[11];
+				"Worker help raises : "+ workerEffect[11];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -668,7 +667,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [12] != 0) {
 			whichworker = 12;
 			descText.text = "Name: " + workerNames[12] + "\n Cost for worker: " +workerCost[12]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[12];
+				"Worker help raises :  "+ workerEffect[12];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -686,7 +685,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [13] != 0) {
 			whichworker = 13;
 			descText.text = "Name: " + workerNames[13] + "\n Cost for worker: " +workerCost[13]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[13];
+				"Worker help raises : "+ workerEffect[13];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -704,7 +703,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [14] != 0) {
 			whichworker = 14;
 			descText.text = "Name: " + workerNames[14] + "\n Cost for worker: " +workerCost[14]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[14];
+				"Worker help raises : "+ workerEffect[14];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -722,7 +721,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [15] != 0) {
 			whichworker = 15;
 			descText.text = "Name: " + workerNames[15] + "\n Cost for worker: " +workerCost[15]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[15];
+				"Worker help raises : "+ workerEffect[15];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -740,7 +739,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [16] != 0) {
 			whichworker = 16;
 			descText.text = "Name: " + workerNames[16] + "\n Cost for worker: " +workerCost[16]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[16];
+				"Worker help raises : "+ workerEffect[16];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -758,7 +757,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [17] != 0) {
 			whichworker = 17;
 			descText.text = "Name: " + workerNames[17] + "\n Cost for worker: " +workerCost[17]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[17];
+				"Worker help raises : "+ workerEffect[17];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -776,7 +775,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [18] != 0) {
 			whichworker = 18;
 			descText.text = "Name: " + workerNames[18] + "\n Cost for worker: " +workerCost[18]+ "\n" +
-				"Customer rate increased by: "+ workerEffect[18];
+				"Worker help raises :  "+ workerEffect[18];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -794,7 +793,7 @@ public class Main : MonoBehaviour {
 		if (workerEffect [19] != 0) {
 			whichworker = 19;
 			descText.text = "Name: " + workerNames [19] + "\n Cost for worker: " + workerCost [19] + "\n" +
-				"Customer rate increased by: " + workerEffect [19];
+				"Worker help raises : " + workerEffect [19];
 			fireBtn.SetActive (true);
 			okayBtn.SetActive (true);
 			isDescInUse = true;
@@ -918,7 +917,6 @@ public class Main : MonoBehaviour {
 	public void toBuisinessPnl(){
 		buisinessPnl.SetActive (true);
 		selectorPnl.SetActive (false);
-		Time.timeScale = 0;
 	}
 	public void offer2(){
 		if (offerType [1] == 1) {
