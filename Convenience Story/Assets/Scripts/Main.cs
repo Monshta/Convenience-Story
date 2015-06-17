@@ -153,10 +153,10 @@ public class Main : MonoBehaviour {
 		if (fame < 0) {
 			fame = 0;
 		}
-		if (customerRate < 0) {
+		if (customerRate < 1) {
 			customerRate = 1;
 		}
-		if (price < 0) {
+		if (price < 1) {
 			price = 1;
 		}
 		if (start == true) {
@@ -268,6 +268,7 @@ public class Main : MonoBehaviour {
 				price -= 1;					// it ruins the merchandise
 				disasterCounter++;
 				alertPnl.SetActive(true);
+				alertActive = true;
 				AlertText.text = "EARTHQUAKE!";
 				cash -= (fame*2);
 			}
@@ -292,8 +293,6 @@ public class Main : MonoBehaviour {
 				cash -= (fame*2);
 			}// other mechanics
 			eventDisaster = 0;	
-			Debug.Log(AlertText.text);
-			Debug.Log(distaster.which());
 
 			//Disasters need rely on fame, they got no chill
 		}
@@ -322,12 +321,16 @@ public class Main : MonoBehaviour {
 			}
 			eventHire = 0;
 		}
-		if (eventBuisiness >91  && buisinessOfferCount < 8 && cash > 0) {
+		if (eventBuisiness >91  && buisinessOfferCount < 8 && cash > 2) {
+			if(offerType[buisinessOfferCount] == 0){
+				alertPnl.SetActive(false);
+				alertActive = false;
+			}
 			buisinessChances = UnityEngine.Random.Range(0,100);
 			eventBuisiness = 0;
 			if(buisinessChances > 0 && buisinessChances < 20){
 				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
-				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range ((cash*0.7f), (cash*0.8f));
+				buisinessCost[buisinessOfferCount] = (Mathf.Round(UnityEngine.Random.Range ((cash*0.7f), (cash*0.8f))*100)/100);
 				offerType[buisinessOfferCount] = 1;
 				buisinessOfferCount++;
 				alertPnl.SetActive(true);
@@ -345,14 +348,17 @@ public class Main : MonoBehaviour {
 			}
 			if(buisinessChances > 60 && buisinessChances < 80){
 				buisinessName[buisinessOfferCount] = randomCompanyNames[(int)UnityEngine.Random.Range(0,15)];
-				buisinessCost[buisinessOfferCount] = UnityEngine.Random.Range (cash*0.7f, cash*0.8f);
+				buisinessCost[buisinessOfferCount] = (Mathf.Round((UnityEngine.Random.Range (cash*0.7f, cash*0.8f))*100)/100);
 				offerType[buisinessOfferCount] = 3;
 				buisinessOfferCount++;
 				alertPnl.SetActive(true);
 				alertActive = true;
 				AlertText.text = "You just got a buisiness offer";
 			}
+
+
 			eventBuisiness = 0;
+			Debug.Log(offerType[0]);
 		}
 	}
 
@@ -361,7 +367,7 @@ public class Main : MonoBehaviour {
 		if (storeUpgradeCost < cash) {
 			customerRate+= 2;
 			cash-=storeUpgradeCost;
-			storeUpgradeCost*=1.5f;
+			storeUpgradeCost=(storeUpgradeCost*1.5f) +cash*0.5f;
 			storeUpgradeCounter++;
 			fame +=2;
 		}
@@ -370,7 +376,7 @@ public class Main : MonoBehaviour {
 		if (merchandiceCost < cash) {
 			price += 1.5f;
 			cash -= merchandiceCost;
-			merchandiceCost*=1.5f;
+			merchandiceCost=merchandiceCost*1.5f + cash*0.5f;
 			merchandiceCounter++;
 			fame +=1;
 				}
