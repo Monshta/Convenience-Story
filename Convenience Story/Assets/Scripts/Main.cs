@@ -120,10 +120,15 @@ public class Main : MonoBehaviour {
 	public float realTime;
 	public static bool newGame = false;
 	public static bool loadGame = false;
-	public static float UITime;
-	public static int seconds;
-	public static int hours;
-	public static int minutes;
+	public float overTimer;
+
+	public int seconds;
+	public int minutes;
+	public int hours;
+	public float gametimer;
+	private GameObject Swag3;
+	Text timeTxt;
+
 
 	 void Start () {
 
@@ -142,18 +147,13 @@ public class Main : MonoBehaviour {
 		swagText = GameObject.Find ("BuisinessTxt");
 		swagText3 = GameObject.Find ("AlertTxt");
 		AlertText = swagText3.GetComponent<Text> ();
-
+		Swag3 = GameObject.Find("timeUI");
+		timeTxt =  Swag3.GetComponent<Text>();
 
 	}
 	
 
 	void Update () {
-		UITime += Time.deltaTime;
-		if (newGame== true) {
-			PlayerPrefs.DeleteAll();
-			newGame = false;
-			Time.timeScale = 1;
-		}
 		if(loadGame == true){
 			fame = PlayerPrefs.GetInt ("fame");
 			cash = PlayerPrefs.GetFloat ("cash");
@@ -164,6 +164,10 @@ public class Main : MonoBehaviour {
 			merchandiceCost = PlayerPrefs.GetFloat ("merchandiceUpgradeCost");
 			workerCount = PlayerPrefs.GetInt ("workerCount");
 			realTime = PlayerPrefs.GetFloat ("RealTime");
+			seconds = PlayerPrefs.GetInt ("seconds");
+			minutes = PlayerPrefs.GetInt ("minutes");
+			hours = PlayerPrefs.GetInt ("hours");
+			gametimer = PlayerPrefs.GetFloat ("gametimer");
 
 			
 			workerNames [0] = PlayerPrefs.GetString ("workerName1");
@@ -254,18 +258,33 @@ public class Main : MonoBehaviour {
 			loadGame = false;
 			Time.timeScale = 1;
 		}
+
 		saveTime += Time.deltaTime;
 		if (saveTime > 60) {
 			saveGame();
 		}
+		gametimer += Time.deltaTime;
+		seconds = Mathf.FloorToInt (gametimer);    
+		if (seconds > 59) {
+			minutes ++;
+			gametimer = 0; 
+		}
+		if (minutes > 59) {
+			hours ++;
+			gametimer = 0;
+		}
+		timeTxt.text = "Time Elapsed: "+ hours+":"+minutes+":"+seconds;
 		realTime += Time.deltaTime;
 		if (cash < -100) {
+			overTimer +=Time.deltaTime;
+			if(timer > 5){
 			alertPnl.SetActive(true);
 			AlertText.text = "GAME OVER!";
 			Time.timeScale = 0;
+			}
 		}
-		if (fame > 5) {
-			maintaneinceCosts = ((fame * 1.3f) - 7.0f);
+		if (fame > 6) {
+			maintaneinceCosts = ((fame * 1.3f) - 8.0f);
 		}
 		if (fame < 1) {
 			fame = 1;
@@ -288,6 +307,7 @@ public class Main : MonoBehaviour {
 			start = false;
 			alertPnl.SetActive (false);
 			alertActive = false;
+			Time.timeScale = 1;
 		
 		}
 
@@ -387,7 +407,7 @@ public class Main : MonoBehaviour {
 				alertPnl.SetActive(true);
 				alertActive = true;
 				AlertText.text = "EARTHQUAKE!";
-				cash -= (fame*2);
+				cash -= (float)(fame*1.5+ 10.0f);
 			}
 			if (distaster.which () == 2) {  //i wana put a volcano here
 				disasterCounter++;	
@@ -400,14 +420,14 @@ public class Main : MonoBehaviour {
 				alertPnl.SetActive(true);
 				alertActive = true;
 				AlertText.text = "You just got melted by a volcano";// but we havnt figured out the
-				cash -= (fame*2);
+				cash -= (float)(fame*1.5+ 10.0f);
 			}	
 			if(distaster.which() == 3){
 				customerRate -= 1;
 				alertPnl.SetActive(true);
 				alertActive = true;
 				AlertText.text = "You got washed by a tsunami";
-				cash -= (fame*2);
+				cash -= (float)(fame*1.5+10.0f);
 			}// other mechanics
 			eventDisaster = 0;	
 
@@ -951,16 +971,6 @@ public class Main : MonoBehaviour {
 		}
 	}
 	public void acceptBtn(){
-		if (cash > buisinessCost [whichOffer]) {
-			eventScam = UnityEngine.Random.Range (0, 100);
-			if (eventScam > 50) {
-				cash -= buisinessCost[whichOffer];
-				alertPnl.SetActive (true);
-				buisinessText.text = "You have been scammed of your earnings. Big Sorry!";
-				alertActive = true;
-				declineButton();
-			}
-			if (eventScam < 50) {
 				if (offerType [whichOffer] == 1) {
 					if (cash > buisinessCost [whichOffer]) {
 						cash -= buisinessCost [whichOffer];
@@ -979,6 +989,7 @@ public class Main : MonoBehaviour {
 						if (buff9Timer > 30) {
 							price = (price * 2 / 3);
 						}
+					
 					}
 				}
 				if (offerType [whichOffer] == 3) {
@@ -986,18 +997,32 @@ public class Main : MonoBehaviour {
 						cash -= buisinessCost [whichOffer];
 						;
 						buff9Timer += Time.deltaTime;
-						while (buff9Timer<120) {
-							eventRobbery -= Time.deltaTime;
+							eventRobbery = 0;
 						}
+						
 					}
+				
+		buisinessName [8] = " ";
+		buisinessCost [8] = 0.0f;
+		offerType [8] = 0;
+		offerType [whichOffer] = -1;
+		for (int i = 0; i<8; i++) {
+			if (offerType [i] == -1) {
+				for (int j = i; j <=(8-j); j++) {
+					buisinessCost [j] = buisinessCost [j + 1];
+					buisinessName [j] = buisinessName [j + 1];
+					offerType[j] = offerType[j+1];
+					buisinessText.text = " ";
 				}
-				declineButton();
+				buisinessOfferCount--;
 			}
+		}
+}
+			
+			
+
 		
-			}
-		
-		
-	}
+	
 	
 	
 public void declineButton(){
@@ -1224,7 +1249,10 @@ public void declineButton(){
 		PlayerPrefs.SetFloat ("merchandiceUpgradeCost", merchandiceCost);
 		PlayerPrefs.SetInt ("workerCount", workerCount);
 		PlayerPrefs.SetFloat ("RealTime", realTime);
-
+		PlayerPrefs.SetInt ("seconds", seconds);
+		PlayerPrefs.SetInt ("minutes", minutes);
+		PlayerPrefs.SetInt ("hours", hours);
+		PlayerPrefs.SetFloat ("gametimer", gametimer);
 		
 		PlayerPrefs.SetString ("workerName1", workerNames [0]);
 		PlayerPrefs.SetFloat ("workerCost1", workerCost [0]);

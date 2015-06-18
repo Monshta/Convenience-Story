@@ -14,11 +14,11 @@ public class Description : MonoBehaviour {
 	}
 	public void storeUpgradeMsg(string S){
 		descriptionText.text = "Cost : $" + (Mathf.Round(main.storeUpgradeCost*100)/100) +
-			"\n increase customer rate by 2 and fame by 2";
+			"\n increase customer rate by 2 and fame by "+(Mathf.Round( ((main.fame*1.3f+2)-main.fame)*1)/1);
 	}
 	public void merchandiceUpgradeMsg(string M){
 		descriptionText.text = "Cost : $" + (Mathf.Round(main.merchandiceCost*100)/100) +
-			"\n increase price by $1.50 and fame by 2";
+					"\n increase price by $1.50 and fame by " + (Mathf.Round(((main.fame*1.3f+1)-main.fame)*1)/1);
 	}
 	public void advertisementUpgradeMsg( string A){
 		descriptionText.text = "Cost : $" + (Mathf.Round(main.advertisementCost*100)/100) +

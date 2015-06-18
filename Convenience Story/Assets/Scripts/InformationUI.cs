@@ -5,21 +5,16 @@ using System.Collections;
 
 public class InformationUI : MonoBehaviour {
 
-	public int seconds;
-	public int minutes;
-	public int hours;
-	public float timer;
+
 	public GameObject cashUI;
 	private Main main;
 	private GameObject Swag;
 	private GameObject Swag2;
-	private GameObject Swag3;
 	private GameObject Swag4;
 	private GameObject Swag5;
 	private GameObject swag6;
 	Text cashTxt;	
 	Text fameTxt;
-	Text timeTxt;
 	Text priceTxt;
 	Text levelTxt;
 	Text upKeepTxt;
@@ -32,8 +27,6 @@ public class InformationUI : MonoBehaviour {
 		cashTxt =  gameObject.GetComponent<Text>();
 		Swag2 = GameObject.Find("fameUI");
 		fameTxt =  Swag2.GetComponent<Text>();
-		Swag3 = GameObject.Find("timeUI");
-		timeTxt =  Swag3.GetComponent<Text>();
 		Swag4 = GameObject.Find("priceUI");
 		priceTxt =  Swag4.GetComponent<Text>();
 		Swag5 = GameObject.Find ("storeLevelUI");
@@ -45,35 +38,14 @@ public class InformationUI : MonoBehaviour {
 	}
 	
 	void Update () {
-		timer += Time.deltaTime;
-		seconds = Mathf.FloorToInt (timer);    
-		if (seconds > 59) {
-			minutes ++;
-			timer = 0; 
-		}
-		if (minutes > 59) {
-			hours ++;
-			timer = 0;
-		}
+
 
 		cashTxt.text = "Cash: $" +  (Mathf.Round(main.cash * 100f) / 100f);
-		fameTxt.text = "Fame: " + main.fame;
-		timeTxt.text = "Time Elapsed: "+ hours+":"+minutes+":"+seconds;//time elapsed
+		fameTxt.text = "Fame: " + main.fame;//time elapsed
 		priceTxt.text = "Price: $" + main.price;// price of materials
 		levelTxt.text = "Store Level: " + main.storeUpgradeCounter;// to keep tracj of store levels
 		upKeepTxt.text = "Upkeep Cost: " + (Mathf.Round(main.maintaneinceCosts* 100f) / 100f);
-		if (saveUI == true) {
-			PlayerPrefs.SetFloat("timer",timer);
-			PlayerPrefs.SetInt ("seconds", seconds);
-			PlayerPrefs.SetInt ("minutes", minutes);
-			PlayerPrefs.SetInt ("hours", hours);
-			PlayerPrefs.Save();
-		}
-		if(loadedUI == true){
-			seconds = PlayerPrefs.GetInt("seconds");
-			timer = PlayerPrefs.GetFloat("timer");
-			loadedUI = false;
-		}
+
 
 }
 }
