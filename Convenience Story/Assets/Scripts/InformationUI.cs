@@ -23,7 +23,8 @@ public class InformationUI : MonoBehaviour {
 	Text priceTxt;
 	Text levelTxt;
 	Text upKeepTxt;
-
+	public static bool loadedUI = false;
+	public static bool saveUI = false;
 	void Start () {
 
 		Swag = GameObject.Find("Swag");
@@ -61,6 +62,18 @@ public class InformationUI : MonoBehaviour {
 		priceTxt.text = "Price: $" + main.price;// price of materials
 		levelTxt.text = "Store Level: " + main.storeUpgradeCounter;// to keep tracj of store levels
 		upKeepTxt.text = "Upkeep Cost: " + (Mathf.Round(main.maintaneinceCosts* 100f) / 100f);
+		if (saveUI == true) {
+			PlayerPrefs.SetFloat("timer",timer);
+			PlayerPrefs.SetInt ("seconds", seconds);
+			PlayerPrefs.SetInt ("minutes", minutes);
+			PlayerPrefs.SetInt ("hours", hours);
+			PlayerPrefs.Save();
+		}
+		if(loadedUI == true){
+			seconds = PlayerPrefs.GetInt("seconds");
+			timer = PlayerPrefs.GetFloat("timer");
+			loadedUI = false;
+		}
 
 }
 }
