@@ -361,7 +361,7 @@ public class Main : MonoBehaviour {
 
 
 			eventBuisiness = 0;
-			Debug.Log(buisinessCost[buisinessOfferCount-1]);
+
 		}
 	}
 
