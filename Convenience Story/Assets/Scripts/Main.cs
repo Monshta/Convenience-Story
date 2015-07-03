@@ -128,7 +128,7 @@ public class Main : MonoBehaviour {
 	public float gametimer;
 	private GameObject Swag3;
 	Text timeTxt;
-
+    public int highscore;
 
 	 void Start () {
 
@@ -258,6 +258,10 @@ public class Main : MonoBehaviour {
 			loadGame = false;
 			Time.timeScale = 1;
 		}
+        if (highscore < fame)
+        {
+            highscore = fame;
+        }
 
 		saveTime += Time.deltaTime;
 		if (saveTime > 60) {
